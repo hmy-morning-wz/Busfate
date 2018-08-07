@@ -1,15 +1,15 @@
 <template>
-  <div class="ranking-list">
+  <div class="ranking-list" onscroll="handleScroll">
     <div class="rank-nav">
       <div class="woman-rank" @click="handleWomanClick()" :class="{ active: isActive==='woman' }">女神榜</div>
       <div class="man-rank" @click="handleManClick()" :class="{ active: isActive==='man' }">男神榜</div>
     </div>
-    <div class="rank-list-top">
+    <div class="rank-list-top" v-if="list1">
       <div class="top1-icon"></div>
       <div class="top2-icon"></div>
       <div class="top3-icon"></div>
     </div>
-    <div class="rank-nav-show" onscroll="handleScroll">
+    <div class="rank-nav-show">
       <div class="show-list-wrapper">
         <div class="show-list" v-if="list1" v-for="(item,index) in list1" :key="index">
           <div class="image-warpper">
@@ -17,7 +17,7 @@
             <div class="sys-number">NO.{{item.id}}</div>
           </div>
           <div class="name">{{item.nickname}}</div>
-          <div class="rode">{{item.lineNo}}路女神</div>
+          <div class="rode">{{item.lineNo}}路{{text}}神</div>
           <div class="ballot">{{item.votes}}票</div>
           <div class="ballot-wrapper" @click="handleBollot(item.id)">
             <span class="icon"></span>
@@ -32,7 +32,7 @@
             <div class="sys-number">NO.{{item.id}}</div>
           </div>
           <div class="name">{{item.nickname}}</div>
-          <div class="rode">{{item.lineNo}}路女神</div>
+          <div class="rode">{{item.lineNo}}路{{text}}神</div>
           <div class="ballot">{{item.votes}}票</div>
           <div class="ballot-wrapper" @click="handleBollot(item.id)">
             <span class="icon"></span>
@@ -47,7 +47,7 @@
             <div class="sys-number">NO.{{item.id}}</div>
           </div>
           <div class="name">{{item.nickname}}</div>
-          <div class="rode">{{item.lineNo}}路女神</div>
+          <div class="rode">{{item.lineNo}}路{{text}}神</div>
           <div class="ballot">{{item.votes}}票</div>
           <div class="ballot-wrapper" @click="handleBollot(item.id)">
             <span class="icon"></span>
@@ -66,6 +66,7 @@ export default {
   data() {
     return {
       isActive: 'woman',
+      text: '女',
       votes: 0,
       userId: 1,
       status: 0,
@@ -82,23 +83,28 @@ export default {
   created() {
     this.getUserStatus()
     this.getParticipanList()
+    console.log(this.page)
   },
   methods: {
     handleScroll() {
       var scrollTop =
         document.body.scrollTop || document.documentElement.scrollTop
       if (document.body.scrollHeight === scrollTop + window.innerHeight) {
-        this.page += 1
+        // this.page += 1
+        alert(this.page)
+        this.getParticipanList()
       }
     },
     handleWomanClick() {
       this.isActive = 'woman'
+      this.text = '女'
       this.gender = 2
       this.page = 1
       this.getParticipanList()
     },
     handleManClick() {
       this.isActive = 'man'
+      this.text = '男'
       this.gender = 1
       this.page = 1
       this.getParticipanList()
@@ -150,6 +156,17 @@ export default {
       })
       console.log(res.data)
     }
+  },
+  mounted() {
+    // document.addEventListener('scroll', function() {
+    //   var scrollTop =
+    //     document.body.scrollTop || document.documentElement.scrollTop
+    //   if (document.body.scrollHeight === scrollTop + window.innerHeight) {
+    //     // this.page += 1
+    //     alert(this.page)
+    //     this.getParticipanList()
+    //   }
+    // })
   },
   components: {}
 }
@@ -219,8 +236,6 @@ export default {
     text-align: center;
   }
 }
-.rank-nav-show {
-}
 .show-list-wrapper {
   display: flex;
   align-items: center;
@@ -231,6 +246,8 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    border-radius: 5px;
+    overflow: hidden;
     .image-warpper {
       position: relative;
       background-color: yellow;
