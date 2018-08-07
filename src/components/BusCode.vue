@@ -1,83 +1,83 @@
 <template>
-    <div class="card-detail">
-        <div class="bg-banner">
+  <div class="card-detail">
+    <div class="bg-banner">
 
-        </div>
-        <div class="detail">
-            <div class="header">
-                <div class="top-icon">
-                    <img src="../assets/images/top.png">
-                </div>
-            </div>
-            <div class="content">
-                <div class="content-header">
-                    <div class="con-header-item" v-for="(item, index) in zone0FirstIconList" :key="index">
-                        <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
-                        <img class="con-header-icon" :src="item.iconImg" @click="handleClick(item.linkUrl)">
-                        <div class="con-header-text">{{item.iconName}}</div>
-                    </div>
-                </div>
-                <div class="content-header content-header2">
-                    <div class="con-header-item" v-for="(item, index) in zone0SecondIconList" :key="index">
-                        <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
-                        <img class="con-header-icon" :src="item.iconImg" @click="handleClick(item.linkUrl)">
-                        <div class="con-header-text">{{item.iconName}}</div>
-                    </div>
-                </div>
-                <div class="content-title">
-                    <div class="line-left" style=""></div>
-                    <div class="line-title">伴你乘车</div>
-                    <div class="line-right"></div>
-                </div>
-                <div class="content-header">
-                    <div class="con-header-item" v-for="(item, index) in detail.zone_1.iconList" :key="index">
-                        <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
-                        <img class="con-header-icon" :src="item.iconImg" @click="handleClick(item.linkUrl)">
-                        <div class="con-header-text">{{item.iconName}}</div>
-                    </div>
-                </div>
-                <div class="content-title">
-                    <div class="line-left" style=""></div>
-                    <div class="line-title">特惠购</div>
-                    <div class="line-right"></div>
-                </div>
-                <div class="content-header">
-                    <div class="con-header-item" v-for="(item, index) in zone2FirstIconList" :key="index">
-                        <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
-                        <img class="con-header-icon" :src="item.iconImg" @click="handleClick(item.linkUrl)">
-                        <div class="con-header-text">{{item.iconName}}</div>
-                    </div>
-                </div>
-                <div class="content-header content-header2">
-                    <div class="con-header-item" v-for="(item, index) in zone2SecondIconList" :key="index">
-                        <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
-                        <img class="con-header-icon" :src="item.iconImg" @click="handleClick(item.linkUrl)">
-                        <div class="con-header-text">{{item.iconName}}</div>
-                    </div>
-                </div>
-                <div class="content-title">
-                    <div class="line-left" style=""></div>
-                    <div class="line-title">城市活动</div>
-                    <div class="line-right"></div>
-                </div>
-                <div class="content-header">
-                    <div class="con-header-item" v-for="(item, index) in detail.zone_3.iconList" :key="index">
-                        <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
-                        <img class="con-header-icon" :src="item.iconImg">
-                        <div class="con-header-text">{{item.iconName}}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer">
-                <p class="footer-text">杭州市民卡与通卡联城联合运营</p>
-                <p class="footer-text">客服电话：0571-87113360</p>
-            </div>
-        </div>
     </div>
+    <div class="detail">
+      <div class="header">
+        <div class="top-icon">
+          <img src="../assets/images/top.png">
+        </div>
+      </div>
+      <div class="content">
+        <div class="content-header">
+          <div class="con-header-item" v-for="(item, index) in zone0FirstIconList" :key="index">
+            <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
+            <img class="con-header-icon" :src="item.iconImg" @click="handleClick(item.linkUrl)">
+            <div class="con-header-text">{{item.iconName}}</div>
+          </div>
+        </div>
+        <div class="content-header content-header2">
+          <div class="con-header-item" v-for="(item, index) in zone0SecondIconList" :key="index">
+            <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
+            <img class="con-header-icon" :src="item.iconImg" @click="handleClick(item.linkUrl)">
+            <div class="con-header-text">{{item.iconName}}</div>
+          </div>
+        </div>
+        <div class="content-title">
+          <div class="line-left" style=""></div>
+          <div class="line-title">伴你乘车</div>
+          <div class="line-right"></div>
+        </div>
+        <div class="content-header">
+          <div class="con-header-item" v-for="(item, index) in detail.zone_1.iconList" :key="index">
+            <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
+            <img class="con-header-icon" :src="item.iconImg" @click="handleClick(item.linkUrl)">
+            <div class="con-header-text">{{item.iconName}}</div>
+          </div>
+        </div>
+        <div class="content-title">
+          <div class="line-left" style=""></div>
+          <div class="line-title">特惠购</div>
+          <div class="line-right"></div>
+        </div>
+        <div class="content-header">
+          <div class="con-header-item" v-for="(item, index) in zone2FirstIconList" :key="index">
+            <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
+            <img class="con-header-icon" :src="item.iconImg" @click="handleClick(item.linkUrl)">
+            <div class="con-header-text">{{item.iconName}}</div>
+          </div>
+        </div>
+        <div class="content-header content-header2">
+          <div class="con-header-item" v-for="(item, index) in zone2SecondIconList" :key="index">
+            <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
+            <img class="con-header-icon" :src="item.iconImg" @click="handleClick(item.linkUrl)">
+            <div class="con-header-text">{{item.iconName}}</div>
+          </div>
+        </div>
+        <div class="content-title">
+          <div class="line-left" style=""></div>
+          <div class="line-title">城市活动</div>
+          <div class="line-right"></div>
+        </div>
+        <div class="content-header">
+          <div class="con-header-item" v-for="(item, index) in detail.zone_3.iconList" :key="index">
+            <img class="top-icon" :src="item.superscriptImg" v-show="item.superscriptImg">
+            <img class="con-header-icon" :src="item.iconImg">
+            <div class="con-header-text">{{item.iconName}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <p class="footer-text">杭州市民卡与通卡联城联合运营</p>
+        <p class="footer-text">客服电话：0571-87113360</p>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 export default {
-  data () {
+  data() {
     return {
       url: '../../../static/images/chengchema@2x.png',
       detail: {
@@ -105,20 +105,22 @@ export default {
     }
   },
   components: {},
-  created () {
+  created() {
     if (window.AlipayJSBridge) {
-        AlipayJSBridge.call('setTransparentTitle', { //eslint-disable-line
-        transparentTitle: 'auto'})
-        AlipayJSBridge.call('hideOptionMenu') //eslint-disable-line
+      AlipayJSBridge.call('setTransparentTitle', {
+        //eslint-disable-line
+        transparentTitle: 'auto'
+      })
+      AlipayJSBridge.call('hideOptionMenu') //eslint-disable-line
     }
     this.getIconList()
   },
   computed: {},
   methods: {
-    async getIconList () {
+    async getIconList() {
       let res = await this.$parent.request({
         // url: `http://sit-operation.allcitygo.com:9109/prefer/icons`,
-        url: `http://10.0.3.116:9234/prefer/icons`,
+        url: 'http://10.0.3.116:9234/prefer/icons',
         method: 'post'
         // data: params
       })
@@ -128,17 +130,17 @@ export default {
       this.zone0FirstIconList = this.detail.zone_0.iconList.slice(0, 4)
       this.zone0SecondIconList = this.detail.zone_0.iconList.slice(4)
     },
-    handleClick (link) {
+    handleClick(link) {
       window.location.href = link
     }
   },
-  mounted () {},
+  mounted() {},
   watch: {}
 }
 </script>
 <style lang="scss" scoped >
-.card-detail{
-    position: relative;
+.card-detail {
+  position: relative;
 }
 .content {
   margin: 0 1.08rem;
@@ -150,11 +152,11 @@ export default {
   height: 7.146667rem /* 536/75 */;
   margin: 0 auto;
 }
-.detail{
-    position: absolute;
-    left: 0;
-    right: 0;
-    top:3.2rem;
+.detail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 3.2rem;
 }
 .header {
   background: url('../assets/images/card.png') no-repeat;
@@ -192,12 +194,12 @@ export default {
     width: 0.586667rem /* 44/75 */;
     height: 0.586667rem /* 44/75 */;
   }
-  .top-icon{
-      width: 1.2rem /* 90/75 */;
-      height: .573333rem /* 43/75 */;
-      position: absolute;
-      top: -.533333rem /* 40/75 */;
-      right: -.266667rem /* 20/75 */;
+  .top-icon {
+    width: 1.2rem /* 90/75 */;
+    height: 0.573333rem /* 43/75 */;
+    position: absolute;
+    top: -0.533333rem /* 40/75 */;
+    right: -0.266667rem /* 20/75 */;
   }
   .con-header-text {
     flex: 1;

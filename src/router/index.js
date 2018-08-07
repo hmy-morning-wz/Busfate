@@ -4,6 +4,8 @@ const SelectExchange = r => require(['../components/SelectExchange'], r)
 const BusCode = r => require(['../components/BusCode'], r)
 const BusLove = r => require(['../components/BusLove'], r)
 const RankingList = r => require(['../components/RankingList'], r)
+const Signup = r => require(['../components/Signup'], r)
+const Preheat = r => require(['../components/Preheat'], r)
 
 // 页面路由
 const routes = [{
@@ -33,6 +35,20 @@ const routes = [{
   name: 'RankingList',
   meta: {
     title: '公交情缘'
+  }
+}, {
+  path: '/Signup',
+  component: Signup,
+  name: 'Signup',
+  meta: {
+    title: '活动报名'
+  }
+}, {
+  path: '/Preheat',
+  component: Preheat,
+  name: 'Preheat',
+  meta: {
+    title: '活动预热'
   }
 }]
 
