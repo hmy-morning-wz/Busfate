@@ -1,0 +1,10 @@
+stages:
+  - deploy
+
+# 定义 job
+SIT life_circle deploy:
+  stage: deploy
+  script:
+    - /data/deploy/autocode/activity_h5.sh
+  only:
+    - dev_hmy
