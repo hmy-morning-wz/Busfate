@@ -1,8 +1,8 @@
 <template>
   <div class="signup">
-    <div class="contain">
+    <div class="contain_ban">
       <div class="message-ban">
-        <input type="text" class="nickname" placeholder="昵称（支持英文大小写和中文）" v-model='nicknameValue'/>
+        <input type="text" class="nickname" placeholder="昵称（支持英文大小写和中文）" v-model='nicknameValue' @input="changeDisable()"/>
         <div class="check-sex">
           <!-- <label for="male">我是男神</label>
           <input type="radio" name="sex" id="male" value="male"><br>
@@ -11,14 +11,14 @@
           <div class="woman-option" @click="handleWomanClick()" :class="{ active: isActive==='woman' }">我是女神</div>
           <div class="man-option" @click="handleManClick()" :class="{ active: isActive==='man' }">我是男神</div>
         </div>
-        <input type="text" class="busline" placeholder="最常乘坐的公交线路（如189）" v-model='buslineValue' style="width:92%"><span style="font-family: PingFangSC-Regular;font-size: 0.4rem;color: #333333;">路</span>
-        <input type="text" class="phoneNo" placeholder="手机号码（为您保密，仅用于获奖联系哦）" v-model='phoneValue'/>
+        <input type="text" class="busline" placeholder="最常乘坐的公交线路（如189）" v-model='buslineValue' @input="changeDisable()" style="width:92%"><span style="font-family: PingFangSC-Regular;font-size: 0.4rem;color: #333333;">路</span>
+        <input type="text" class="phoneNo" placeholder="手机号码（为您保密，仅用于获奖联系哦）" v-model='phoneValue' @input="changeDisable()"/>
       </div>
       <div class="imgUploading">
           <div class="txt"><span>我的靓照（只需上传一张）</span></div>
           <div id="moveinput" style="position: absolute;margin-top: 0">
               <div class="inputcontrol">
-                  <input @change="readFile($event)" type="file" id="input1" ref="pathClear" accept="image*" capture="camera" class="inputstyle" >
+                  <input @change="readFile($event)" type="file" id="input1" ref="pathClear" accept="image*" capture="camera" class="inputstyle"  @input="changeDisable()" >
               </div>
           </div>          
           <div class="picture" v-if="imgs.length>0" v-for='(item ,index ) in imgs' :key="index">
@@ -29,7 +29,7 @@
           </div>
           <div style="clear:both;"></div>
       </div>
-      <div style="text-align:center"><button class="sub-btn" :disabled="{disabled: notOk==='notOK'}">提交</button></div>
+      <div style="text-align:center"><button class="sub-btn" :disabled="{disabled: notOk===true}" :class="{ okBtn: isOk===true }">提交</button></div>
     </div>
   </div>
 </template>
@@ -41,7 +41,8 @@ export default {
     return {
       imgs: [],
       isActive:"woman",
-      notOK:"notOK",
+      notOK:true,
+      isOk:false,
       nicknameValue:"",
       buslineValue:"",
       phoneValue:""
@@ -50,7 +51,6 @@ export default {
   methods: {
     handleWomanClick() {
       this.isActive = "woman";
-      console.log()
     },
     handleManClick() {
       this.isActive = "man";
@@ -73,7 +73,13 @@ export default {
       console.log(this.imgs);
     },
     changeDisable: function() {
-
+      if((this.nicknameValue !== "")&&(this.phoneValue !== "")&&(this.buslineValue !== "")&&(this.imgs.length !== 0)) {
+        this.isOk = true;
+        this.notOK = false;
+      } else {
+        this.isOk = false;
+        this.notOK = true;
+      }
     }
   }
 };
@@ -254,9 +260,9 @@ body {
   background: url("../assets/images/BG@2x.png") no-repeat;
   background-size: cover;
 }
-.contain {
+.contain_ban {
   margin: 0;
-  height: 100vh;
+  /* height: 100vh; */
   padding: 1rem;
   padding-top: 1.5rem;
   padding-bottom: 2rem;
@@ -276,7 +282,7 @@ body {
   padding: 0;
   font-family: PingFangSC-Regular;
   font-size: 0.4rem;
-  color: #bbbbbb;
+  color: #333333;
   margin-bottom: 0.2rem;
 }
 
@@ -373,7 +379,7 @@ body {
   cursor: pointer;
 }
 
-.contain .sub-btn {
+.contain_ban .sub-btn {
   overflow: hidden;
   width: 6.9333rem;
   height: 1.4667rem;
@@ -390,5 +396,21 @@ body {
   opacity: 1;
 }
 
+.contain_ban .okBtn {
+  overflow: hidden;
+  width: 6.9333rem;
+  height: 1.4667rem;
+  color: white;
+  font-size: 0.5rem;
+  font-family: PingFangSC-Regular;
+  letter-spacing: 0.3rem;
+  /* background-color: #0079c5; */
+  border: none;
+  border-radius: 100px;
+  margin: 0 auto;
+  background: #ff6191;
+  box-shadow: 0 0.2rem 0.4rem 0 rgba(187, 187, 187, 0.4);
+  opacity: 1;
+}
 
 </style>
