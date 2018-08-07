@@ -84,7 +84,7 @@ export default {
   position: relative;
 }
 
-.contain {
+.preheat .contain {
   background: url("../assets/images/fate-bg.png") no-repeat;
   background-size: cover;
   width: 100%;

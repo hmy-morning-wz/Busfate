@@ -40,21 +40,15 @@ export default {
   data() {
     return {
       imgs: [],
-      // showWomanRank:true,
-      // showManRank:false,
       isActive:"woman",
       notOK:"notOK"
     };
   },
   methods: {
     handleWomanClick() {
-      // this.showWomanRank = true;
-      // this.showManRank = false;
       this.isActive = "woman";
     },
     handleManClick() {
-      // this.showWomanRank = false;
-      // this.showManRank = true;
       this.isActive = "man";
     },
     readFile: function(event) {
@@ -68,12 +62,14 @@ export default {
         console.log(reader.result);
       };
     },
-
     del: function(e) {
       e.target.parentNode.parentNode.removeChild(e.target.parentNode);
       console.log(this.imgs);
       this.imgs.splice(0, 1);
       console.log(this.imgs);
+    },
+    changeDisable: function() {
+      
     }
   }
 };
