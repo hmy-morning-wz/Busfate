@@ -9,71 +9,55 @@
       <div class="top2-icon"></div>
       <div class="top3-icon"></div>
     </div>
-    <div class="rank-nav-show woman" v-show="showWomanRank">
-      <div class="show-list">
-        <img src="" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
-        <div class="name">昵称</div>
-        <div class="rode">125路女神</div>
-        <div class="ballot">222票</div>
-        <div class="bollot-wrapper" @click="handleBollot()">
-          <span class="icon"></span>
-          <span class="text">投票</span>
+    <div class="rank-nav-show" onscroll="handleScroll">
+      <div class="show-list-wrapper">
+        <div class="show-list" v-if="list1" v-for="(item,index) in list1" :key="index">
+          <div class="image-warpper">
+            <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
+            <div class="sys-number">NO.{{item.id}}</div>
+          </div>
+          <div class="name">{{item.nickname}}</div>
+          <div class="rode">{{item.lineNo}}路女神</div>
+          <div class="ballot">{{item.votes}}票</div>
+          <div class="ballot-wrapper" @click="handleBollot(item.id)">
+            <span class="icon"></span>
+            <span class="text">投票</span>
+          </div>
         </div>
       </div>
-      <div class="show-list">
-        <img src="" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
-        <div class="name">昵称</div>
-        <div class="rode">125路女神</div>
-        <div class="ballot">222票</div>
-        <div class="bollot-wrapper" @click="handleBollot()">
-          <span class="icon"></span>
-          <span class="text">投票</span>
+      <div class="show-list-wrapper">
+        <div class="show-list" v-if="list2" v-for="(item,index) in list2" :key="index">
+          <div class="image-warpper">
+            <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
+            <div class="sys-number">NO.{{item.id}}</div>
+          </div>
+          <div class="name">{{item.nickname}}</div>
+          <div class="rode">{{item.lineNo}}路女神</div>
+          <div class="ballot">{{item.votes}}票</div>
+          <div class="ballot-wrapper" @click="handleBollot(item.id)">
+            <span class="icon"></span>
+            <span class="text">投票</span>
+          </div>
         </div>
       </div>
-      <div class="show-list">
-        <img src="" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
-        <div class="name">昵称</div>
-        <div class="rode">125路女神</div>
-        <div class="ballot">222票</div>
-        <div class="bollot-wrapper" @click="handleBollot()">
-          <span class="icon"></span>
-          <span class="text">投票</span>
-        </div>
-      </div>
-    </div>
-    <div class="rank-nav-show man" v-show="showManRank">
-      <div class="show-list">
-        <img src="" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
-        <div class="name">昵称</div>
-        <div class="rode">125路女神</div>
-        <div class="ballot">222票</div>
-        <div class="bollot-wrapper" @click="handleBollot()">
-          <span class="icon"></span>
-          <span class="text">投票</span>
-        </div>
-      </div>
-      <div class="show-list">
-        <img src="" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
-        <div class="name">昵称</div>
-        <div class="rode">125路女神</div>
-        <div class="ballot">222票</div>
-        <div class="bollot-wrapper" @click="handleBollot()">
-          <span class="icon"></span>
-          <span class="text">投票</span>
-        </div>
-      </div>
-      <div class="show-list">
-        <img src="" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
-        <div class="name">昵称</div>
-        <div class="rode">125路女神</div>
-        <div class="ballot">222票</div>
-        <div class="bollot-wrapper" @click="handleBollot()">
-          <span class="icon"></span>
-          <span class="text">投票</span>
+      <div class="show-list-wrapper">
+        <div class="show-list" v-if="list3" v-for="(item,index) in list3" :key="index">
+          <div class="image-warpper">
+            <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
+            <div class="sys-number">NO.{{item.id}}</div>
+          </div>
+          <div class="name">{{item.nickname}}</div>
+          <div class="rode">{{item.lineNo}}路女神</div>
+          <div class="ballot">{{item.votes}}票</div>
+          <div class="ballot-wrapper" @click="handleBollot(item.id)">
+            <span class="icon"></span>
+            <span class="text">投票</span>
+          </div>
         </div>
       </div>
     </div>
     <div class="footer"></div>
+    <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
   </div>
 </template>
 
@@ -81,22 +65,90 @@
 export default {
   data() {
     return {
-      showWomanRank: true,
-      showManRank: false,
-      isActive: 'woman'
+      isActive: 'woman',
+      votes: 0,
+      userId: 1,
+      status: 0,
+      dis: false,
+      gender: 2,
+      page: 1,
+      pageSize: 9,
+      lists: [],
+      list1: [],
+      list2: [],
+      list3: []
     }
   },
-  created() {},
+  created() {
+    this.getUserStatus()
+    this.getParticipanList()
+  },
   methods: {
+    handleScroll() {
+      var scrollTop =
+        document.body.scrollTop || document.documentElement.scrollTop
+      if (document.body.scrollHeight === scrollTop + window.innerHeight) {
+        this.page += 1
+      }
+    },
     handleWomanClick() {
-      this.showWomanRank = true
-      this.showManRank = false
       this.isActive = 'woman'
+      this.gender = 2
+      this.page = 1
+      this.getParticipanList()
     },
     handleManClick() {
-      this.showWomanRank = false
-      this.showManRank = true
       this.isActive = 'man'
+      this.gender = 1
+      this.page = 1
+      this.getParticipanList()
+    },
+    handleBollot(participantId) {
+      this.getVote(participantId)
+    },
+    handleSignUpClick() {
+      if (this.status === 1 || 2) {
+        this.dis = true
+      }
+      if (this.status === 0 || 3) {
+        this.dis = false
+      }
+      console.log('111')
+    },
+    async getUserStatus() {
+      let res = await this.$parent.request({
+        url: `http://10.0.2.190:9234/busLove/participant/getUserStatus?userId=${
+          this.userId
+        }`,
+        method: 'post'
+        // data: params
+      })
+      console.log(res.data)
+      this.status = res.data.status
+    },
+    async getParticipanList() {
+      let res = await this.$parent.request({
+        url: `http://10.0.2.190:9234/busLove/participant/getParticipantList?gender=${
+          this.gender
+        }&page=${this.page}&pageSize=${this.pageSize}`,
+        method: 'post'
+        // data: params
+      })
+      console.log(res.data)
+      this.lists = res.data
+      this.list1 = res.data[0]
+      this.list2 = res.data[1]
+      this.list3 = res.data[2]
+    },
+    async getVote(participantId) {
+      let res = await this.$parent.request({
+        url: `http://10.0.2.190:9234/busLove/vote?userId=${
+          this.userId
+        }&participantId=${participantId}`,
+        method: 'post'
+        // data: params
+      })
+      console.log(res.data)
     }
   },
   components: {}
@@ -151,7 +203,7 @@ export default {
     width: 1.4rem;
     margin-left: 2.573333rem;
     font-family: PingFangSC-Medium;
-    font-size: 0.213333rem;
+    font-size: 0.426667rem;
     color: #cacddf;
     text-align: center;
   }
@@ -162,12 +214,14 @@ export default {
     width: 1.4rem;
     margin-left: 1.226667rem;
     font-family: PingFangSC-Medium;
-    font-size: 0.213333rem;
+    font-size: 0.426667rem;
     color: #cacddf;
     text-align: center;
   }
 }
 .rank-nav-show {
+}
+.show-list-wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -177,8 +231,29 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    .image {
+    .image-warpper {
+      position: relative;
       background-color: yellow;
+      width: 2.8rem;
+      height: 3.733333rem;
+      .image {
+        width: 2.8rem;
+        height: 3.733333rem;
+        background-color: yellowgreen;
+      }
+      .sys-number {
+        position: absolute;
+        width: 1.066667rem;
+        height: 0.533333rem;
+        line-height: 0.533333rem;
+        top: 0.266667rem;
+        left: 0;
+        font-family: DINAlternate-Bold;
+        font-size: 9px;
+        color: #ffffff;
+        background: url('../assets/images/tag_NO@2x.png') no-repeat center;
+        background-size: 1.066667rem 0.533333rem;
+      }
     }
     .name {
       font-family: PingFangSC-Regular;
@@ -201,7 +276,7 @@ export default {
       text-align: center;
       margin-top: 0.066667rem;
     }
-    .bollot-wrapper {
+    .ballot-wrapper {
       width: 2.8rem;
       height: 0.8rem;
       margin-top: 0.2rem;
@@ -230,8 +305,7 @@ export default {
   width: 100%;
   height: 1.333333rem;
 }
-.footer::after {
-  content: '我要报名';
+.footer1 {
   width: 100%;
   height: 1.333333rem;
   line-height: 1.333333rem;
@@ -241,8 +315,8 @@ export default {
   text-align: center;
   font-family: PingFangSC-Regular;
   font-size: 18px;
-  color: #FFFFFF;
-  background: rgba(255,97,145,0.95);
-  border: 1px solid #979797;
+  color: #ffffff;
+  background: rgba(255, 97, 145, 0.95);
+  border: 0;
 }
 </style>

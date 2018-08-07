@@ -32,7 +32,7 @@ const routes = [{
   component: RankingList,
   name: 'RankingList',
   meta: {
-    title: '我要报名'
+    title: '公交情缘'
   }
 }]
 
