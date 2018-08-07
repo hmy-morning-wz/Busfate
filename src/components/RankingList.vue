@@ -1,72 +1,81 @@
 <template>
-  <div class="ranking-list" onscroll="handleScroll">
-    <div class="rank-nav">
-      <div class="woman-rank" @click="handleWomanClick()" :class="{ active: isActive==='woman' }">女神榜</div>
-      <div class="man-rank" @click="handleManClick()" :class="{ active: isActive==='man' }">男神榜</div>
-    </div>
-    <div class="rank-list-top" v-if="list1">
-      <div class="top1-icon"></div>
-      <div class="top2-icon"></div>
-      <div class="top3-icon"></div>
-    </div>
-    <div class="rank-nav-show">
-      <div class="show-list-wrapper">
-        <div class="show-list" v-if="list1" v-for="(item,index) in list1" :key="index">
-          <div class="image-warpper">
-            <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
-            <div class="sys-number">NO.{{item.id}}</div>
+  <div class="warpper">
+    <Preheat :showRankHeader="showRankHeader"></Preheat>
+    <div class="rank-list-warpper">
+      <div class="ranking-list" @mouse="handleScroll()">
+        <div class="rank-nav">
+          <div class="woman-rank" @click="handleWomanClick()" :class="{ active: isActive==='woman' }">女神榜</div>
+          <div class="man-rank" @click="handleManClick()" :class="{ active: isActive==='man' }">男神榜</div>
+        </div>
+        <div class="rank-list-top" v-if="list1">
+          <div class="top1-icon"></div>
+          <div class="top2-icon"></div>
+          <div class="top3-icon"></div>
+        </div>
+        <div class="rank-nav-show">
+          <div class="show-list-wrapper">
+            <div class="show-list" v-if="list1" v-for="(item,index) in list1" :key="index">
+              <div class="image-warpper">
+                <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
+                <div class="sys-number">NO.{{item.id}}</div>
+              </div>
+              <div class="name">{{item.nickname}}</div>
+              <div class="rode">{{item.lineNo}}路{{text}}神</div>
+              <div class="ballot">{{item.votes}}票</div>
+              <div class="ballot-wrapper" @click="handleBollot(item.id)">
+                <span class="icon"></span>
+                <span class="text">投票</span>
+              </div>
+            </div>
           </div>
-          <div class="name">{{item.nickname}}</div>
-          <div class="rode">{{item.lineNo}}路{{text}}神</div>
-          <div class="ballot">{{item.votes}}票</div>
-          <div class="ballot-wrapper" @click="handleBollot(item.id)">
-            <span class="icon"></span>
-            <span class="text">投票</span>
+          <div class="show-list-wrapper">
+            <div class="show-list" v-if="list2" v-for="(item,index) in list2" :key="index">
+              <div class="image-warpper">
+                <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
+                <div class="sys-number">NO.{{item.id}}</div>
+              </div>
+              <div class="name">{{item.nickname}}</div>
+              <div class="rode">{{item.lineNo}}路{{text}}神</div>
+              <div class="ballot">{{item.votes}}票</div>
+              <div class="ballot-wrapper" @click="handleBollot(item.id)">
+                <span class="icon"></span>
+                <span class="text">投票</span>
+              </div>
+            </div>
+          </div>
+          <div class="show-list-wrapper">
+            <div class="show-list" v-if="list3" v-for="(item,index) in list3" :key="index">
+              <div class="image-warpper">
+                <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
+                <div class="sys-number">NO.{{item.id}}</div>
+              </div>
+              <div class="name">{{item.nickname}}</div>
+              <div class="rode">{{item.lineNo}}路{{text}}神</div>
+              <div class="ballot">{{item.votes}}票</div>
+              <div class="ballot-wrapper" @click="handleBollot(item.id)">
+                <span class="icon"></span>
+                <span class="text">投票</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="show-list-wrapper">
-        <div class="show-list" v-if="list2" v-for="(item,index) in list2" :key="index">
-          <div class="image-warpper">
-            <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
-            <div class="sys-number">NO.{{item.id}}</div>
-          </div>
-          <div class="name">{{item.nickname}}</div>
-          <div class="rode">{{item.lineNo}}路{{text}}神</div>
-          <div class="ballot">{{item.votes}}票</div>
-          <div class="ballot-wrapper" @click="handleBollot(item.id)">
-            <span class="icon"></span>
-            <span class="text">投票</span>
-          </div>
-        </div>
-      </div>
-      <div class="show-list-wrapper">
-        <div class="show-list" v-if="list3" v-for="(item,index) in list3" :key="index">
-          <div class="image-warpper">
-            <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
-            <div class="sys-number">NO.{{item.id}}</div>
-          </div>
-          <div class="name">{{item.nickname}}</div>
-          <div class="rode">{{item.lineNo}}路{{text}}神</div>
-          <div class="ballot">{{item.votes}}票</div>
-          <div class="ballot-wrapper" @click="handleBollot(item.id)">
-            <span class="icon"></span>
-            <span class="text">投票</span>
-          </div>
-        </div>
+        <div class="footer"></div>
+        <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
       </div>
     </div>
-    <div class="footer"></div>
-    <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
+
   </div>
+
 </template>
 
 <script type="text/ecmascript-6">
+import Preheat from './Preheat'
 export default {
   data() {
     return {
       isActive: 'woman',
       text: '女',
+      showRankHeader: true,
       votes: 0,
       userId: 1,
       status: 0,
@@ -87,13 +96,16 @@ export default {
   },
   methods: {
     handleScroll() {
-      var scrollTop =
-        document.body.scrollTop || document.documentElement.scrollTop
-      if (document.body.scrollHeight === scrollTop + window.innerHeight) {
-        // this.page += 1
-        alert(this.page)
-        this.getParticipanList()
-      }
+      // console.log(11111)
+      // alert(2222)
+      // var scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+      // console.log(scrollTop)
+      // if (document.body.scrollHeight === scrollTop + window.innerHeight) {
+      //   // this.page += 1
+      //   console.log(111112)
+      //   alert('33333')
+      //   this.getParticipanList()
+      // }
     },
     handleWomanClick() {
       this.isActive = 'woman'
@@ -123,7 +135,7 @@ export default {
     },
     async getUserStatus() {
       let res = await this.$parent.request({
-        url: `http://10.0.2.190:9234/busLove/participant/getUserStatus?userId=${
+        url: `http://10.0.3.116:9234/busLove/participant/getUserStatus?userId=${
           this.userId
         }`,
         method: 'post'
@@ -134,7 +146,7 @@ export default {
     },
     async getParticipanList() {
       let res = await this.$parent.request({
-        url: `http://10.0.2.190:9234/busLove/participant/getParticipantList?gender=${
+        url: `http://10.0.3.116:9234/busLove/participant/getParticipantList?gender=${
           this.gender
         }&page=${this.page}&pageSize=${this.pageSize}`,
         method: 'post'
@@ -148,7 +160,7 @@ export default {
     },
     async getVote(participantId) {
       let res = await this.$parent.request({
-        url: `http://10.0.2.190:9234/busLove/vote?userId=${
+        url: `http://10.0.3.116:9234/busLove/vote/voteParticipant?userId=${
           this.userId
         }&participantId=${participantId}`,
         method: 'post'
@@ -158,22 +170,35 @@ export default {
     }
   },
   mounted() {
-    // document.addEventListener('scroll', function() {
-    //   var scrollTop =
-    //     document.body.scrollTop || document.documentElement.scrollTop
-    //   if (document.body.scrollHeight === scrollTop + window.innerHeight) {
-    //     // this.page += 1
-    //     alert(this.page)
-    //     this.getParticipanList()
-    //   }
-    // })
+    document.addEventListener('scroll', function() {
+      var scrollTop =
+        document.body.scrollTop || document.documentElement.scrollTop
+      // console.log(scrollTop)
+      if (document.body.scrollHeight === scrollTop + window.innerHeight) {
+        console.log(123)
+        // this.page += 1
+        this.getParticipanList()
+      }
+    })
   },
-  components: {}
+  components: {
+    Preheat: Preheat
+  }
 }
 </script>
 
 <style scoped lang="scss">
+.rank-list-warpper {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: -10px;
+  box-shadow: 0 10px 30px 0 rgba(206,123,155,0.30);
+}
 .ranking-list {
+  position: relative;
   width: 90%;
   margin: 0 auto;
 }
@@ -183,6 +208,7 @@ export default {
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 }
+
 .rank-list-top {
   display: flex;
   align-items: center;
@@ -215,8 +241,8 @@ export default {
   border-radius: 3px;
   .woman-rank {
     display: inline-block;
-    height: 1.2rem;
-    line-height: 1.2rem;
+    height: 1.21rem;
+    line-height: 1.21rem;
     width: 1.4rem;
     margin-left: 2.573333rem;
     font-family: PingFangSC-Medium;
@@ -226,8 +252,8 @@ export default {
   }
   .man-rank {
     display: inline-block;
-    height: 1.2rem;
-    line-height: 1.2rem;
+    height: 1.21rem;
+    line-height: 1.21rem;
     width: 1.4rem;
     margin-left: 1.226667rem;
     font-family: PingFangSC-Medium;
@@ -248,6 +274,7 @@ export default {
     justify-content: center;
     border-radius: 5px;
     overflow: hidden;
+    // box-shadow: 0 10px 30px 0 rgba(206,123,155,0.30);
     .image-warpper {
       position: relative;
       background-color: yellow;

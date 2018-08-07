@@ -107,11 +107,11 @@ export default {
   components: {},
   created() {
     if (window.AlipayJSBridge) {
-      AlipayJSBridge.call('setTransparentTitle', {
-        //eslint-disable-line
-        transparentTitle: 'auto'
-      })
-      AlipayJSBridge.call('hideOptionMenu') //eslint-disable-line
+      // AlipayJSBridge.call('setTransparentTitle', {
+      //   //eslint-disable-line
+      //   transparentTitle: 'auto'
+      // })
+      // AlipayJSBridge.call('hideOptionMenu') //eslint-disable-line
     }
     this.getIconList()
   },
