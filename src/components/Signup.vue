@@ -2,7 +2,7 @@
   <div class="signup">
     <div class="contain">
       <div class="message-ban">
-        <input type="text" class="nickname" placeholder="昵称（支持英文大小写和中文）">
+        <input type="text" class="nickname" placeholder="昵称（支持英文大小写和中文）" v-model='nicknameValue'/>
         <div class="check-sex">
           <!-- <label for="male">我是男神</label>
           <input type="radio" name="sex" id="male" value="male"><br>
@@ -11,8 +11,8 @@
           <div class="woman-option" @click="handleWomanClick()" :class="{ active: isActive==='woman' }">我是女神</div>
           <div class="man-option" @click="handleManClick()" :class="{ active: isActive==='man' }">我是男神</div>
         </div>
-        <input type="text" class="busline" placeholder="最常乘坐的公交线路（如189）" style="width:92%"><span style="font-family: PingFangSC-Regular;font-size: 0.4rem;color: #333333;">路</span>
-        <input type="text" class="phoneNo" placeholder="手机号码（为您保密，仅用于获奖联系哦）">
+        <input type="text" class="busline" placeholder="最常乘坐的公交线路（如189）" v-model='buslineValue' style="width:92%"><span style="font-family: PingFangSC-Regular;font-size: 0.4rem;color: #333333;">路</span>
+        <input type="text" class="phoneNo" placeholder="手机号码（为您保密，仅用于获奖联系哦）" v-model='phoneValue'/>
       </div>
       <div class="imgUploading">
           <div class="txt"><span>我的靓照（只需上传一张）</span></div>
@@ -41,12 +41,16 @@ export default {
     return {
       imgs: [],
       isActive:"woman",
-      notOK:"notOK"
+      notOK:"notOK",
+      nicknameValue:"",
+      buslineValue:"",
+      phoneValue:""
     };
   },
   methods: {
     handleWomanClick() {
       this.isActive = "woman";
+      console.log()
     },
     handleManClick() {
       this.isActive = "man";
@@ -67,6 +71,9 @@ export default {
       console.log(this.imgs);
       this.imgs.splice(0, 1);
       console.log(this.imgs);
+    },
+    changeDisable: function() {
+
     }
   }
 };
