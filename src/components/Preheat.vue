@@ -1,6 +1,6 @@
 <template>
   <div class="preheat">
-    <div class="contain">
+    <div class="container">
       <div class="bg-ban">
         <div class="title-banner">
           <span class="line1">扫码乘车时代</span>
@@ -79,12 +79,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 .preheat {
   position: relative;
 }
 
-.preheat .contain {
+.preheat .container {
   background: url("../assets/images/fate-bg.png") no-repeat;
   background-size: cover;
   width: 100%;
