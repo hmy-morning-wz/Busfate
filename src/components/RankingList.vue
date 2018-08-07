@@ -77,7 +77,7 @@ export default {
       text: '女',
       showRankHeader: true,
       votes: 0,
-      userId: 1,
+      userId: '1',
       status: 0,
       dis: false,
       gender: 2,
