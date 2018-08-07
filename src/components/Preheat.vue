@@ -178,7 +178,7 @@ export default {
 }
 .prizee .prize-name{
   display:block;
-  width:4rem; 
+  width:4rem;
   margin-bottom: 0.5rem;
 }
 
