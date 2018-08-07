@@ -67,9 +67,6 @@ export default {
       console.log(this.imgs);
       this.imgs.splice(0, 1);
       console.log(this.imgs);
-    },
-    changeDisable: function() {
-      
     }
   }
 };

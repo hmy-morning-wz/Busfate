@@ -11,7 +11,7 @@
           </span>
           <span class="line4">
             搜寻杭城男神女神<br>
-            邂逅你的公车情缘
+            邂逅你的公交情缘
           </span>
         </div>
         <div class="prize-banner">
