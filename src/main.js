@@ -24,6 +24,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   next()
+  document.title = to.meta.title
 })
 
 /* eslint-disable no-new */
