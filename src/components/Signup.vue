@@ -84,7 +84,7 @@ export default {
 // mui.previewImage()
 </script>
 
-<style>
+<style scoped>
 .mui-preview-image.mui-fullscreen {
   position: fixed;
   z-index: 20;

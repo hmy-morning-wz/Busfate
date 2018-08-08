@@ -4,17 +4,17 @@
     <div class="rank-list-warpper">
       <div class="ranking-list" @mouse="handleScroll()">
         <div class="rank-nav">
-          <div class="woman-rank" @click="handleWomanClick()" :class="{ active: isActive==='woman' }">女神榜</div>
-          <div class="man-rank" @click="handleManClick()" :class="{ active: isActive==='man' }">男神榜</div>
+          <div class="woman-rank" @click="handleWomanClick()" :class="{ active1: isActive==='woman' }">女神榜</div>
+          <div class="man-rank" @click="handleManClick()" :class="{ active1: isActive==='man' }">男神榜</div>
         </div>
-        <div class="rank-list-top" v-if="list1">
+        <div class="rank-list-top" v-if="lists">
           <div class="top1-icon"></div>
           <div class="top2-icon"></div>
           <div class="top3-icon"></div>
         </div>
         <div class="rank-nav-show">
           <div class="show-list-wrapper">
-            <div class="show-list" v-if="list1" v-for="(item,index) in list1" :key="index">
+            <div class="show-list" v-if="lists" v-for="(item,index) in lists" :key="index">
               <div class="image-warpper">
                 <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
                 <div class="sys-number">NO.{{item.id}}</div>
@@ -22,37 +22,7 @@
               <div class="name">{{item.nickname}}</div>
               <div class="rode">{{item.lineNo}}路{{text}}神</div>
               <div class="ballot">{{item.votes}}票</div>
-              <div class="ballot-wrapper" @click="handleBollot(item.id,index, 1)">
-                <span class="icon"></span>
-                <span class="text">投票</span>
-              </div>
-            </div>
-          </div>
-          <div class="show-list-wrapper">
-            <div class="show-list" v-if="list2" v-for="(item,index) in list2" :key="index">
-              <div class="image-warpper">
-                <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
-                <div class="sys-number">NO.{{item.id}}</div>
-              </div>
-              <div class="name">{{item.nickname}}</div>
-              <div class="rode">{{item.lineNo}}路{{text}}神</div>
-              <div class="ballot">{{item.votes}}票</div>
-              <div class="ballot-wrapper" @click="handleBollot(item.id,index,2)">
-                <span class="icon"></span>
-                <span class="text">投票</span>
-              </div>
-            </div>
-          </div>
-          <div class="show-list-wrapper">
-            <div class="show-list" v-if="list3" v-for="(item,index) in list3" :key="index">
-              <div class="image-warpper">
-                <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
-                <div class="sys-number">NO.{{item.id}}</div>
-              </div>
-              <div class="name">{{item.nickname}}</div>
-              <div class="rode">{{item.lineNo}}路{{text}}神</div>
-              <div class="ballot">{{item.votes}}票</div>
-              <div class="ballot-wrapper" @click="handleBollot(item.id,index,3)">
+              <div class="ballot-wrapper" @click="handleBollot(item.id,index)">
                 <span class="icon"></span>
                 <span class="text">投票</span>
               </div>
@@ -77,20 +47,23 @@ export default {
       text: '女',
       showRankHeader: true,
       votes: 0,
-      userId: '520',
+      userId: '31',
       status: 0,
       dis: false,
       gender: 2,
       page: 1,
       pageSize: 9,
-      list1: [],
-      list2: [],
-      list3: [],
+      lists: [],
       code: 20000
     }
   },
   created() {
+    // 获取并存储userID
+    // let authCode = this.getQueryString('auth_code')
+    // window.localStorage.userId
+    // 获取用户报名状态
     this.getUserStatus()
+    // 获取男神女神列表
     this.getParticipanList()
     console.log(this.page)
   },
@@ -109,8 +82,8 @@ export default {
       this.page = 1
       this.getParticipanList()
     },
-    handleBollot(participantId, index, num) {
-      this.getVote(participantId, index, num)
+    handleBollot(participantId, index) {
+      this.getVote(participantId, index)
     },
     handleSignUpClick() {
       if (this.status === 1) {
@@ -130,8 +103,8 @@ export default {
         this.dis = true
       }
       if (this.status === 0 || 3) {
-        window.location.href = '#/Signup'
         this.dis = false
+        window.location.href = '#/Signup'
       }
     },
     async getUserStatus() {
@@ -146,7 +119,6 @@ export default {
       this.status = res.data.status
     },
     async getParticipanList() {
-      let that = this
       let res = await this.$parent.request({
         url: `http://10.0.3.116:9234/busLove/participant/getParticipantList?gender=${
           this.gender
@@ -154,23 +126,14 @@ export default {
         method: 'post'
         // data: params
       })
-      console.log(res.data)
-      res.data[0].forEach((item) => {
-        console.log(that.list1)
-        console.log(item)
-        that.lists1.push(item)
-      })
-      res.data[1].forEach((item) => {
-        that.list2.push(item)
-      })
-      res.data[2].forEach((item) => {
-        that.list3.push(item)
-      })
-      // this.list1 = res.data[0]
-      // this.list2 = res.data[1]
-      // this.list3 = res.data[2]
+      // console.log(res.data)
+      if (res.code === '20000' && res.data) {
+        res.data.forEach(item => {
+          this.lists.push(item)
+        })
+      }
     },
-    async getVote(participantId, index, num) {
+    async getVote(participantId, index) {
       let res = await this.$parent.request({
         url: 'http://10.0.3.116:9234/busLove/vote/voteParticipant',
         method: 'post',
@@ -189,23 +152,39 @@ export default {
         })
       } else if (this.code === '20000') {
         // this.newVote = res.data
-        let list = `list${num}`
-        this[`${list}`][index].votes = res.data
+        this.lists[index].votes = res.data
+      }
+    },
+    getQueryString(name) {
+      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
+      var res = window.location.search.substr(1).match(reg)
+      if (res[2]) {
+        return res[2]
+      } else {
+        return null
       }
     }
   },
   mounted() {
     let that = this
     document.addEventListener('scroll', function() {
-      var scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+      var scrollTop =
+        document.body.scrollTop ||
+        document.documentElement.scrollTop ||
+        window.pageYOffset
       // console.log(document.body.scrollHeight)
       // console.log(window.innerHeight)
-      // console.log(parseInt(scrollTop))
-      if (document.body.scrollHeight === parseInt(scrollTop) + window.innerHeight) {
-        console.log(123)
+      // console.log(scrollTop)
+      if (
+        document.body.scrollHeight ===
+        Math.round(scrollTop) + window.innerHeight
+      ) {
+        // console.log(true)
         that.page += 1
-        console.log(that.page)
-        // that.getParticipanList()
+        // console.log(that.page)
+        that.getParticipanList()
+      } else {
+        // console.log(false)
       }
     })
   },
@@ -216,6 +195,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.warpper {
+  width: 100%;
+  overflow: hidden;
+}
 .rank-list-warpper {
   position: relative;
   width: 100%;
@@ -230,7 +213,7 @@ export default {
   width: 90%;
   margin: 0 auto;
 }
-.active {
+.active1 {
   border-bottom: solid 2px #8383dd;
   color: #8383dd !important;
   border-bottom-left-radius: 2px;
@@ -240,7 +223,8 @@ export default {
 .rank-list-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
+  flex-wrap: wrap;
   margin-top: 0.266667rem;
   .top1-icon {
     width: 2.8rem;
@@ -293,9 +277,13 @@ export default {
 .show-list-wrapper {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  overflow: hidden;
   .show-list {
     margin-bottom: 0.333333rem;
+    // margin-left: 10px;
+    margin-right: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -329,21 +317,22 @@ export default {
     }
     .name {
       font-family: PingFangSC-Regular;
-      font-size: 14px;
+      font-size: 0.373333rem;
       color: #000000;
       text-align: center;
       margin-top: 0.066667rem;
+      overflow: hidden;
     }
     .rode {
       font-family: PingFangSC-Regular;
-      font-size: 12px;
+      font-size: 11px;
       color: #999999;
       text-align: center;
       margin-top: 0.066667rem;
     }
     .ballot {
       font-family: PingFangSC-Regular;
-      font-size: 12px;
+      font-size: 11px;
       color: #999999;
       text-align: center;
       margin-top: 0.066667rem;
