@@ -83,7 +83,6 @@ export default {
       gender: 2,
       page: 1,
       pageSize: 9,
-      lists: [],
       list1: [],
       list2: [],
       list3: [],
@@ -96,18 +95,6 @@ export default {
     console.log(this.page)
   },
   methods: {
-    handleScroll() {
-      // console.log(11111)
-      // alert(2222)
-      // var scrollTop = document.body.scrollTop || document.documentElement.scrollTop
-      // console.log(scrollTop)
-      // if (document.body.scrollHeight === scrollTop + window.innerHeight) {
-      //   // this.page += 1
-      //   console.log(111112)
-      //   alert('33333')
-      //   this.getParticipanList()
-      // }
-    },
     handleWomanClick() {
       this.isActive = 'woman'
       this.text = '女'
@@ -126,13 +113,26 @@ export default {
       this.getVote(participantId, index, num)
     },
     handleSignUpClick() {
-      if (this.status === 1 || 2) {
+      if (this.status === 1) {
+        this.$messagebox.alert('', {
+          title: '温馨提示',
+          message: '您上传的照片未审核',
+          showCancelButton: false
+        })
+        this.dis = true
+      }
+      if (this.status === 2) {
+        this.$messagebox.alert('', {
+          title: '温馨提示',
+          message: '您已参加过活动了',
+          showCancelButton: false
+        })
         this.dis = true
       }
       if (this.status === 0 || 3) {
+        window.location.href = '#/Signup'
         this.dis = false
       }
-      console.log('111')
     },
     async getUserStatus() {
       let res = await this.$parent.request({
@@ -142,10 +142,11 @@ export default {
         method: 'post'
         // data: params
       })
-      console.log(res.data)
+      // console.log(res.data)
       this.status = res.data.status
     },
     async getParticipanList() {
+      let that = this
       let res = await this.$parent.request({
         url: `http://10.0.3.116:9234/busLove/participant/getParticipantList?gender=${
           this.gender
@@ -154,10 +155,20 @@ export default {
         // data: params
       })
       console.log(res.data)
-      this.lists = res.data
-      this.list1 = res.data[0]
-      this.list2 = res.data[1]
-      this.list3 = res.data[2]
+      res.data[0].forEach((item) => {
+        console.log(that.list1)
+        console.log(item)
+        that.lists1.push(item)
+      })
+      res.data[1].forEach((item) => {
+        that.list2.push(item)
+      })
+      res.data[2].forEach((item) => {
+        that.list3.push(item)
+      })
+      // this.list1 = res.data[0]
+      // this.list2 = res.data[1]
+      // this.list3 = res.data[2]
     },
     async getVote(participantId, index, num) {
       let res = await this.$parent.request({
@@ -184,14 +195,17 @@ export default {
     }
   },
   mounted() {
+    let that = this
     document.addEventListener('scroll', function() {
-      var scrollTop =
-        document.body.scrollTop || document.documentElement.scrollTop
-      // console.log(scrollTop)
-      if (document.body.scrollHeight === scrollTop + window.innerHeight) {
+      var scrollTop = document.body.scrollTop || document.documentElement.scrollTop
+      // console.log(document.body.scrollHeight)
+      // console.log(window.innerHeight)
+      // console.log(parseInt(scrollTop))
+      if (document.body.scrollHeight === parseInt(scrollTop) + window.innerHeight) {
         console.log(123)
-        // this.page += 1
-        this.getParticipanList()
+        that.page += 1
+        console.log(that.page)
+        // that.getParticipanList()
       }
     })
   },
@@ -361,12 +375,12 @@ export default {
 }
 .footer {
   width: 100%;
-  height: 1.333333rem;
+  height: 50px;
 }
 .footer1 {
   width: 100%;
-  height: 1.333333rem;
-  line-height: 1.333333rem;
+  height: 50px;
+  line-height: 50px;
   position: fixed;
   bottom: 0;
   left: 0;
