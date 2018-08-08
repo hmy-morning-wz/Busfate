@@ -2,7 +2,6 @@ const Index = r => require(['../views/index'], r)
 const error = r => require(['../views/error'], r)
 const SelectExchange = r => require(['../components/SelectExchange'], r)
 const BusCode = r => require(['../components/BusCode'], r)
-const BusLove = r => require(['../components/BusLove'], r)
 const RankingList = r => require(['../components/RankingList'], r)
 const Signup = r => require(['../components/Signup'], r)
 const Preheat = r => require(['../components/Preheat'], r)
@@ -25,10 +24,6 @@ const routes = [{
   path: '/BusCode',
   component: BusCode,
   name: 'BusCode'
-}, {
-  path: '/BusLove',
-  component: BusLove,
-  name: 'BusLove'
 }, {
   path: '/RankingList',
   component: RankingList,

@@ -3,6 +3,7 @@ import * as CONFIG from './config'
 
 // 返回请求
 function httpResponse(res) {
+  // console.log(res)
   let ret = ''
   switch (res.code) {
   case '0':
@@ -61,9 +62,9 @@ export async function request(opts) {
     // failure
     console.log(err)
     response = {
-      err: err,
-      errMsg: '请求超时或请求无响应',
-      code: 1
+      err: err.response.status,
+      errMsg: err.response.data.message || '请检查网络是否正常',
+      code: err.response.data.code
     }
   })
   return httpResponse(response)

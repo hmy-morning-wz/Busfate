@@ -22,7 +22,7 @@
               <div class="name">{{item.nickname}}</div>
               <div class="rode">{{item.lineNo}}路{{text}}神</div>
               <div class="ballot">{{item.votes}}票</div>
-              <div class="ballot-wrapper" @click="handleBollot(item.id)">
+              <div class="ballot-wrapper" @click="handleBollot(item.id,index, 1)">
                 <span class="icon"></span>
                 <span class="text">投票</span>
               </div>
@@ -37,7 +37,7 @@
               <div class="name">{{item.nickname}}</div>
               <div class="rode">{{item.lineNo}}路{{text}}神</div>
               <div class="ballot">{{item.votes}}票</div>
-              <div class="ballot-wrapper" @click="handleBollot(item.id)">
+              <div class="ballot-wrapper" @click="handleBollot(item.id,index,2)">
                 <span class="icon"></span>
                 <span class="text">投票</span>
               </div>
@@ -52,7 +52,7 @@
               <div class="name">{{item.nickname}}</div>
               <div class="rode">{{item.lineNo}}路{{text}}神</div>
               <div class="ballot">{{item.votes}}票</div>
-              <div class="ballot-wrapper" @click="handleBollot(item.id)">
+              <div class="ballot-wrapper" @click="handleBollot(item.id,index,3)">
                 <span class="icon"></span>
                 <span class="text">投票</span>
               </div>
@@ -77,7 +77,7 @@ export default {
       text: '女',
       showRankHeader: true,
       votes: 0,
-      userId: '1',
+      userId: '520',
       status: 0,
       dis: false,
       gender: 2,
@@ -86,7 +86,8 @@ export default {
       lists: [],
       list1: [],
       list2: [],
-      list3: []
+      list3: [],
+      code: 20000
     }
   },
   created() {
@@ -121,8 +122,8 @@ export default {
       this.page = 1
       this.getParticipanList()
     },
-    handleBollot(participantId) {
-      this.getVote(participantId)
+    handleBollot(participantId, index, num) {
+      this.getVote(participantId, index, num)
     },
     handleSignUpClick() {
       if (this.status === 1 || 2) {
@@ -158,15 +159,28 @@ export default {
       this.list2 = res.data[1]
       this.list3 = res.data[2]
     },
-    async getVote(participantId) {
+    async getVote(participantId, index, num) {
       let res = await this.$parent.request({
-        url: `http://10.0.3.116:9234/busLove/vote/voteParticipant?userId=${
-          this.userId
-        }&participantId=${participantId}`,
-        method: 'post'
-        // data: params
+        url: 'http://10.0.3.116:9234/busLove/vote/voteParticipant',
+        method: 'post',
+        data: {
+          userId: this.userId,
+          participantId: participantId
+        }
       })
-      console.log(res.data)
+      console.log(res)
+      this.code = res.code
+      if (this.code === '40004') {
+        this.$messagebox.alert('', {
+          title: '温馨提示',
+          message: res.errMsg,
+          showCancelButton: false
+        })
+      } else if (this.code === '20000') {
+        // this.newVote = res.data
+        let list = `list${num}`
+        this[`${list}`][index].votes = res.data
+      }
     }
   },
   mounted() {
@@ -195,7 +209,7 @@ export default {
   border-radius: 10px;
   overflow: hidden;
   margin-top: -10px;
-  box-shadow: 0 10px 30px 0 rgba(206,123,155,0.30);
+  box-shadow: 0 10px 30px 0 rgba(206, 123, 155, 0.3);
 }
 .ranking-list {
   position: relative;
