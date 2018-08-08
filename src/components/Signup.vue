@@ -4,10 +4,6 @@
       <div class="message-ban">
         <input type="text" class="nickname" placeholder="昵称（支持英文大小写和中文）" v-model='nicknameValue' @input="changeDisable()"/>
         <div class="check-sex">
-          <!-- <label for="male">我是男神</label>
-          <input type="radio" name="sex" id="male" value="male"><br>
-          <label for="female">我是女神</label>
-          <input type="radio" name="sex" id="female" value="female"><br> -->
           <div class="woman-option" @click="handleWomanClick()" :class="{ active: isActive==='woman' }">我是女神</div>
           <div class="man-option" @click="handleManClick()" :class="{ active: isActive==='man' }">我是男神</div>
         </div>
@@ -29,41 +25,82 @@
           </div>
           <div style="clear:both;"></div>
       </div>
-      <div style="text-align:center"><button class="sub-btn" :disabled="{disabled: notOk===true}" :class="{ okBtn: isOk===true }">提交</button></div>
+      <div style="text-align:center"><button class="sub-btn" :class="{ okBtn: isOk===true }" @click="sub_mes()">提交</button></div>
     </div>
+    <ConfirmBan v-show="showDialog" :dialog-option="dialogOption" ref="dialog"></ConfirmBan>
   </div>
 </template>
 
 <script>
+import ConfirmBan from "./ConfirmBan.vue";
+// import axios from 'axios'
 export default {
   name: "Signup",
+  components: {
+    ConfirmBan
+  },
   data() {
     return {
       imgs: [],
-      isActive:"woman",
-      notOK:true,
-      isOk:false,
-      nicknameValue:"",
-      buslineValue:"",
-      phoneValue:""
+      files: [],
+      isActive: 'woman',
+      isOk: false,
+      nicknameValue: '',
+      buslineValue: '',
+      phoneValue: '',
+      showDialog: false,
+      dialogOption: '',
+      tiptitle: '您有信息未填写正确哦~',
+      tipContent: '报名成功，我们会尽快审核哦',
+      photoLink: ''
     };
   },
   methods: {
     handleWomanClick() {
-      this.isActive = "woman";
+      this.isActive = 'woman';
     },
     handleManClick() {
-      this.isActive = "man";
+      this.isActive = 'man';
     },
     readFile: function(event) {
       var reader = new FileReader();
-      console.log(event.target.files[0]);
+      // console.log(event.target.files[0]);
+      this.files.push(event.target.files[0]);
+      console.log(this.files[0]);
       reader.readAsDataURL(event.target.files[0]);
       var that = this;
       reader.onload = function() {
         that.imgs.push(reader.result);
         that.$refs.pathClear.value = "";
-        console.log(reader.result);
+        // console.log(reader.result);
+        if (
+          that.nicknameValue !== "" &&
+          that.phoneValue !== "" &&
+          that.buslineValue !== "" &&
+          that.imgs.length !== 0
+        ) {
+          that.isOk = true;
+        } else {
+          that.isOk = false;
+        }
+        var formData = new FormData();
+        formData.append('file', that.files[0]);
+        // var tmp = formData.getAll('file');
+        // axios.post('http://10.0.3.116:9234/busLove/uploadFile/uploadOne', formData)
+        that.$parent.request({
+          baseURL: 'http://10.0.3.116:9234/busLove/uploadFile/uploadOne',
+          headers:{'Content-type':'multipart/form-data'},
+          method: 'POST',
+          data:formData
+        })
+        .then(res => {
+          if (res.code ==='20000') {
+            that.photoLink = res.data
+            console.log(that.photoLink)
+          }
+        }).catch(e => {
+          console.log(e)
+        })
       };
     },
     del: function(e) {
@@ -71,16 +108,58 @@ export default {
       console.log(this.imgs);
       this.imgs.splice(0, 1);
       console.log(this.imgs);
-    },
-    changeDisable: function() {
-      if((this.nicknameValue !== "")&&(this.phoneValue !== "")&&(this.buslineValue !== "")&&(this.imgs.length !== 0)) {
+      if (
+        this.nicknameValue !== "" &&
+        this.phoneValue !== "" &&
+        this.buslineValue !== "" &&
+        this.imgs.length !== 0
+      ) {
         this.isOk = true;
-        this.notOK = false;
       } else {
         this.isOk = false;
-        this.notOK = true;
+      }
+    },
+    changeDisable: function() {
+      if (
+        this.nicknameValue !== "" &&
+        this.phoneValue !== "" &&
+        this.buslineValue !== "" &&
+        this.imgs.length !== 0
+      ) {
+        this.isOk = true;
+      } else {
+        this.isOk = false;
+      }
+    },
+    sub_mes: function() {
+      var phoneReg = /1[3|4|5|7|8][0-9](\d|\*){4}\d{4}/;
+      var nameReg = /^[0-9a-zA-Z]{1,20}$/;
+      if (
+        !phoneReg.test(this.phoneValue) ||
+        !nameReg.test(this.nicknameValue)
+      ) {
+        console.log("2");
+        this.showDialog = true;
+        // this.tiptitle = "您有信息未填写正确哦~";
+        this.$refs.dialog.modal.text = "";
+        this.$refs.dialog.modal.title = this.tiptitle;
+        this.$refs.dialog
+          .confirm()
+          .then(() => {
+            this.showDialog = false;
+            // next();
+          })
+          .catch(() => {
+            this.showDialog = false;
+            // next();
+          });
+      } else {
+        alert(1);
       }
     }
+  },
+  created(){
+    // console.log(this.$axios)
   }
 };
 
@@ -286,12 +365,13 @@ body {
   margin-bottom: 0.2rem;
 }
 
-.check-sex{
+.check-sex {
   width: 100%;
   display: flex;
   margin: 0.3rem 0;
 }
-.woman-option, .man-option{
+.woman-option,
+.man-option {
   width: 2.333rem;
   height: 0.9rem;
   margin-right: 0.3rem;
@@ -300,10 +380,10 @@ body {
   font-family: PingFangSC-Regular;
   font-size: 0.3733rem;
   color: #333333;
-  border: 1px solid #E7E7E7;
+  border: 1px solid #e7e7e7;
   border-radius: 0.5867rem;
 }
-.active{
+.active {
   width: 2.333rem;
   height: 0.9rem;
   margin-right: 0.3rem;
@@ -311,10 +391,10 @@ body {
   text-align: center;
   font-family: PingFangSC-Regular;
   font-size: 0.3733rem;
-  color: #FFFFFF;
-  border: 1px solid #E7E7E7;
+  color: #ffffff;
+  border: 1px solid white;
   border-radius: 0.5867rem;
-  background: #FF6191;
+  background: #ff6191;
 }
 .imgUploading {
   height: 5.7333rem;
@@ -412,5 +492,4 @@ body {
   box-shadow: 0 0.2rem 0.4rem 0 rgba(187, 187, 187, 0.4);
   opacity: 1;
 }
-
 </style>

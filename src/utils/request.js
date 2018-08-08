@@ -66,3 +66,32 @@ export async function request (opts) {
   })
   return httpResponse(response)
 }
+
+export function ajax (url, sendData) {
+  return new Promise(function (resolve, reject) {
+    var data = {
+      request: JSON.stringify(sendData)
+    }
+    var aData = []
+    for (var attr in data) {
+      aData.push(attr + '=' + data[attr])
+    }
+    var sData = aData.join('&')
+    const handler = function () {
+      if (this.readyState !== 4) {
+        return
+      }
+      if (this.status === 200) {
+        var res = JSON.parse(this.response)
+        resolve(res)
+      } else {
+        reject(new Error('访问出错！'))
+      }
+    }
+    const client = new XMLHttpRequest()
+    client.open('POST', url)
+    client.onreadystatechange = handler
+    // client.setRequestHeader('Content-type', 'multipart/form-data')
+    client.send(sData)
+  })
+}

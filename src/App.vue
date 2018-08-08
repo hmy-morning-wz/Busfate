@@ -5,12 +5,13 @@
 </template>
 
 <script>
-import { request } from './utils/request'
+import { request,ajax } from './utils/request'
 export default {
   name: 'App',
   data () {
     return {
-      request: request
+      request: request,
+      ajax: ajax
     }
   }
 }
