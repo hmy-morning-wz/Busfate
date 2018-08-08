@@ -7,7 +7,7 @@
           <div class="woman-option" @click="handleWomanClick()" :class="{ active: isActive==='woman' }">我是女神</div>
           <div class="man-option" @click="handleManClick()" :class="{ active: isActive==='man' }">我是男神</div>
         </div>
-        <input type="text" class="busline" placeholder="最常乘坐的公交线路（如189）" v-model='buslineValue' @input="changeDisable()" style="width:92%"><span style="font-family: PingFangSC-Regular;font-size: 0.4rem;color: #333333;">路</span>
+        <input type="text" class="busline" placeholder="最常乘坐的公交线路（如189）" v-model='buslineValue' @input="changeDisable()" style="width:80%"><span style="font-family: PingFangSC-Regular;font-size: 0.4rem;color: #333333;">路</span>
         <input type="text" class="phoneNo" placeholder="手机号码（为您保密，仅用于获奖联系哦）" v-model='phoneValue' @input="changeDisable()"/>
       </div>
       <div class="imgUploading">
@@ -52,15 +52,18 @@ export default {
       dialogOption: '',
       tiptitle: '您有信息未填写正确哦~',
       tipContent: '报名成功，我们会尽快审核哦',
-      photoLink: ''
+      photoLink: '',
+      gender: 1
     };
   },
   methods: {
     handleWomanClick() {
       this.isActive = 'woman';
+      this.gender = 1
     },
     handleManClick() {
       this.isActive = 'man';
+      this.gender = 2
     },
     readFile: function(event) {
       var reader = new FileReader();
@@ -131,14 +134,73 @@ export default {
         this.isOk = false;
       }
     },
+    async uploadMes () {
+      let res = await this.$parent.request({
+        // url: `http://sit-operation.allcitygo.com:9109/prefer/icons`,
+        url: `http://10.0.3.116:9234/busLove/participant/apply`,
+        method: 'post',
+        data: {
+          'gender': this.gender,
+          'lineNo': this.buslineValue,
+          'nickname': this.nicknameValue,
+          'photo': this.photoLink,
+          'telephone': this.phoneValue,
+          'userId': window.localStorage.userId
+        }
+      })
+      if (res.code === '20000'){
+        this.$refs.dialog.isError = true;
+        this.showDialog = true;
+        this.$refs.dialog.modal.title = "";
+        this.$refs.dialog.modal.text = this.tipContent;
+        this.$refs.dialog
+          .confirm()
+          .then(() => {
+            this.showDialog = false;
+            // next();
+          })
+          .catch(() => {
+            this.showDialog = false;
+            // next();
+          });
+      } else if(res.code === '40004') {
+        this.showDialog = true;
+        this.$refs.dialog.modal.title = "";
+        this.$refs.dialog.modal.text = '该用户已报名';
+        this.$refs.dialog
+          .confirm()
+          .then(() => {
+            this.showDialog = false;
+            // next();
+          })
+          .catch(() => {
+            this.showDialog = false;
+            // next();
+          });
+      } else {
+        this.showDialog = true;
+        this.$refs.dialog.modal.title = "";
+        this.$refs.dialog.modal.text = '网络繁忙';
+        this.$refs.dialog
+          .confirm()
+          .then(() => {
+            this.showDialog = false;
+            // next();
+          })
+          .catch(() => {
+            this.showDialog = false;
+            // next();
+          });
+      }
+    },
     sub_mes: function() {
       var phoneReg = /1[3|4|5|7|8][0-9](\d|\*){4}\d{4}/;
-      var nameReg = /^[0-9a-zA-Z]{1,20}$/;
+      var nameReg = /^[0-9a-zA-Z\u4e00-\u9fa5]{1,20}$/;
       if (
         !phoneReg.test(this.phoneValue) ||
         !nameReg.test(this.nicknameValue)
       ) {
-        console.log("2");
+        this.$refs.dialog.isError = true;
         this.showDialog = true;
         // this.tiptitle = "您有信息未填写正确哦~";
         this.$refs.dialog.modal.text = "";
@@ -154,7 +216,8 @@ export default {
             // next();
           });
       } else {
-        alert(1);
+        console.log(this.gender)
+        this.uploadMes()
       }
     }
   },
@@ -492,4 +555,9 @@ body {
   box-shadow: 0 0.2rem 0.4rem 0 rgba(187, 187, 187, 0.4);
   opacity: 1;
 }
+
+/* .signup /deep/ .dialog .dialog-content{
+  background: url('../assets/images/dialog_box_success@2x.png') no-repeat;
+  background-size: contain;
+} */
 </style>

@@ -1,7 +1,7 @@
 <template>
 <div class="dialog">
 	<div class="mask"></div>
-	<div class="dialog-content">
+	<div class="dialog-content" :class="{ isError: isError===true }">
 		<h3 class="title">{{ modal.title }}</h3>
 		<p class="text">{{ modal.text }}</p>
 		<div class="btn-group">
@@ -24,6 +24,7 @@ export default {
       resolve: "",
       reject: "",
       promise: "", // 保存promise对象
+      isError: false,
       modal: {
         title: "",
         text: "",
@@ -134,5 +135,10 @@ export default {
     z-index: 50001;
     background: rgba(0, 0, 0, 0.5);
   }
+}
+
+.dialog .isError {
+  background: url('../assets/images/dialog_box_success@2x.png') no-repeat;
+  background-size: contain;
 }
 </style>
