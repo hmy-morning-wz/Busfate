@@ -2,9 +2,9 @@ const Index = r => require(['../views/index'], r)
 const error = r => require(['../views/error'], r)
 const SelectExchange = r => require(['../components/SelectExchange'], r)
 const BusCode = r => require(['../components/BusCode'], r)
+const RankingList = r => require(['../components/RankingList'], r)
 const Signup = r => require(['../components/Signup'], r)
 const Preheat = r => require(['../components/Preheat'], r)
-const ConfirmBan = r => require(['../components/ConfirmBan'], r)
 
 // 页面路由
 const routes = [{
@@ -25,6 +25,13 @@ const routes = [{
   component: BusCode,
   name: 'BusCode'
 }, {
+  path: '/RankingList',
+  component: RankingList,
+  name: 'RankingList',
+  meta: {
+    title: '公交情缘'
+  }
+}, {
   path: '/Signup',
   component: Signup,
   name: 'Signup',
@@ -37,13 +44,6 @@ const routes = [{
   name: 'Preheat',
   meta: {
     title: '活动预热'
-  }
-}, {
-  path: '/ConfirmBan',
-  component: ConfirmBan,
-  name: 'Preheat',
-  meta: {
-    title: 'confirm'
   }
 }]
 
