@@ -195,7 +195,7 @@ export default {
     },
     sub_mes: function() {
       var phoneReg = /1[3|4|5|7|8][0-9](\d|\*){4}\d{4}/;
-      var nameReg = /^[0-9a-zA-Z\u4e00-\u9fa5]{1,20}$/;
+      var nameReg = /^[0-9a-zA-Z]{1,20}$/;
       if (
         !phoneReg.test(this.phoneValue) ||
         !nameReg.test(this.nicknameValue)
