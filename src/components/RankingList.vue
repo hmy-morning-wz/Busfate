@@ -16,7 +16,7 @@
           <div class="show-list-wrapper">
             <div class="show-list" v-if="lists" v-for="(item,index) in lists" :key="index">
               <div class="image-warpper">
-                <img :src="item.phone" alt="" style="width: 2.8rem;height: 3.733333rem;" class="image">
+                <img :src="item.photo === 'string'||'' ? 'https://sit-img-citytsm.oss-cn-hangzhou.aliyuncs.com/20180808172059542sZGJxo.png' : (item.photo.indexOf('https') > -1 ? item.photo : `https://${item.photo}`)" alt="" class="image">
                 <div class="sys-number">NO.{{item.id}}</div>
               </div>
               <div class="name">{{item.nickname}}</div>
@@ -33,7 +33,6 @@
         <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
       </div>
     </div>
-
   </div>
 
 </template>
@@ -47,7 +46,6 @@ export default {
       text: '女',
       showRankHeader: true,
       votes: 0,
-      userId: '31',
       status: 0,
       dis: false,
       gender: 2,
@@ -58,20 +56,30 @@ export default {
     }
   },
   created() {
-    // 获取并存储userID
-    // let authCode = this.getQueryString('auth_code')
-    // window.localStorage.userId
+    // 获取用户id
+    this.getAlipayUserId()
     // 获取用户报名状态
     this.getUserStatus()
     // 获取男神女神列表
     this.getParticipanList()
-    console.log(this.page)
+    // eslint-disable-next-line
+    AlipayJSBridge.call(
+      'startShare',
+      {
+        bizType: '', // 业务标识，为空时将会显示默认的分享渠道列表。
+        onlySelectChannel: ['ALPContact', 'Weixin'] // 当用户选择该数组内指定的分享渠道时，仅返回渠道名，而不是真正开始分享
+      },
+      function(data) {
+        alert(data)
+      }
+    )
   },
   methods: {
     handleWomanClick() {
       this.isActive = 'woman'
       this.text = '女'
       this.gender = 2
+      this.lists = []
       this.page = 1
       this.getParticipanList()
     },
@@ -79,6 +87,7 @@ export default {
       this.isActive = 'man'
       this.text = '男'
       this.gender = 1
+      this.lists = []
       this.page = 1
       this.getParticipanList()
     },
@@ -110,7 +119,7 @@ export default {
     async getUserStatus() {
       let res = await this.$parent.request({
         url: `http://10.0.3.116:9234/busLove/participant/getUserStatus?userId=${
-          this.userId
+          window.localStorage.userId
         }`,
         method: 'post'
         // data: params
@@ -138,7 +147,7 @@ export default {
         url: 'http://10.0.3.116:9234/busLove/vote/voteParticipant',
         method: 'post',
         data: {
-          userId: this.userId,
+          userId: window.localStorage.userId,
           participantId: participantId
         }
       })
@@ -155,13 +164,16 @@ export default {
         this.lists[index].votes = res.data
       }
     },
-    getQueryString(name) {
-      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
-      var res = window.location.search.substr(1).match(reg)
-      if (res[2]) {
-        return res[2]
-      } else {
-        return null
+    async getAlipayUserId() {
+      let res = await this.$parent.request({
+        url: `http://10.0.2.190:9234/busLove/access/getAlipayUserId?auth_code=${
+          this.$route.query.auth_code
+        }`,
+        method: 'post'
+      })
+      // console.log(res.data)
+      if (res.code === '20000' && res.data) {
+        window.localStorage.userId = res.data
       }
     }
   },
@@ -293,13 +305,13 @@ export default {
     // box-shadow: 0 10px 30px 0 rgba(206,123,155,0.30);
     .image-warpper {
       position: relative;
-      background-color: yellow;
       width: 2.8rem;
       height: 3.733333rem;
       .image {
         width: 2.8rem;
         height: 3.733333rem;
-        background-color: yellowgreen;
+        border: 0;
+        object-fit: contain;
       }
       .sys-number {
         position: absolute;
