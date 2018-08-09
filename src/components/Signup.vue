@@ -97,7 +97,7 @@ export default {
         // axios.post('http://10.0.3.116:9234/busLove/uploadFile/uploadOne', formData)
         that.$parent
           .request({
-            baseURL: 'https://sit-operation.allcitygo.com:80/buslove/uploadFile/uploadOne',
+            baseURL: 'http://sit-operation.allcitygo.com:80/buslove/uploadFile/uploadOne',
             headers: { 'Content-type': 'multipart/form-data' },
             method: 'POST',
             data: formData
