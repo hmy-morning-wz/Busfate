@@ -152,13 +152,13 @@ export default {
       })
       // this.hideLoading()
       // console.log(res.data)
-      if (!res.data) {
-        this.type = false
-      }
       if (res.code === '20000' && res.data) {
         res.data.forEach(item => {
           this.lists.push(item)
         })
+      }
+      if (this.lists.length === 0) {
+        this.type = false
       }
     },
     async getVote(participantId, index) {

@@ -13,7 +13,7 @@
       </div>
       <div class="imgUploading">
         <div class="txt">
-          <span>我的靓（只需上传一张）</span>
+          <span>我的靓照（只需上传一张）</span>
         </div>
         <div id="moveinput" style="position: absolute;margin-top: 0">
           <div class="inputcontrol">
@@ -58,17 +58,18 @@ export default {
       tiptitle: '您有信息未填写正确哦~',
       tipContent: '报名成功，我们会尽快审核哦',
       photoLink: '',
-      gender: 1
+      gender: 2,
+      isUpload: false
     }
   },
   methods: {
     handleWomanClick() {
       this.isActive = 'woman'
-      this.gender = 1
+      this.gender = 2
     },
     handleManClick() {
       this.isActive = 'man'
-      this.gender = 2
+      this.gender = 1
     },
     readFile: function(event) {
       var reader = new FileReader()
@@ -107,10 +108,57 @@ export default {
             if (res.code === '20000') {
               that.photoLink = res.data
               console.log(that.photoLink)
+              that.isUpload = true
+              that.isOk = true
+              that.$refs.dialog.isError = true
+              that.showDialog = true
+              that.$refs.dialog.modal.title = ''
+              that.$refs.dialog.modal.text = '图片上传成功'
+              that.$refs.dialog
+                .confirm()
+                .then(() => {
+                  that.showDialog = false
+                  // next();
+                })
+                .catch(() => {
+                  that.showDialog = false
+                  // next();
+                })
+            } else {
+              that.isOk = false
+              that.$refs.dialog.isError = false
+              that.showDialog = true
+              that.$refs.dialog.modal.title = ''
+              that.$refs.dialog.modal.text = '图片上传失败'
+              that.$refs.dialog
+                .confirm()
+                .then(() => {
+                  that.showDialog = false
+                  // next();
+                })
+                .catch(() => {
+                  that.showDialog = false
+                  // next();
+                })
             }
           })
           .catch(e => {
             console.log(e)
+            that.isOk = false
+            that.$refs.dialog.isError = false
+            that.showDialog = true
+            that.$refs.dialog.modal.title = ''
+            that.$refs.dialog.modal.text = '图片上传失败'
+            that.$refs.dialog
+              .confirm()
+              .then(() => {
+                that.showDialog = false
+                // next();
+              })
+              .catch(() => {
+                that.showDialog = false
+                // next();
+              })
           })
       }
     },
@@ -121,6 +169,7 @@ export default {
       this.files.splice(0, 1)
       console.log(this.imgs)
       this.photoLink = ''
+      this.isUpload = true
       if (
         this.nicknameValue !== '' &&
         this.phoneValue !== '' &&
@@ -167,10 +216,12 @@ export default {
           .confirm()
           .then(() => {
             this.showDialog = false
+            this.$router.go(-1)
             // next();
           })
           .catch(() => {
             this.showDialog = false
+            this.$router.go(-1)
             // next();
           })
       } else if (res.code === '40004') {
@@ -228,7 +279,23 @@ export default {
             // next();
           })
       } else {
-        if (this.isOk) {
+        if (this.isUpload === false) {
+          this.$refs.dialog.isError = false
+          this.showDialog = true
+          // this.tiptitle = "您有信息未填写正确哦~";
+          this.$refs.dialog.modal.text = ''
+          this.$refs.dialog.modal.title = '图片上传失败'
+          this.$refs.dialog
+            .confirm()
+            .then(() => {
+              this.showDialog = false
+              // next();
+            })
+            .catch(() => {
+              this.showDialog = false
+              // next();
+            })
+        } else if (this.isOk) {
           console.log(this.gender)
           this.uploadMes()
         } else {
