@@ -13,7 +13,7 @@
       </div>
       <div class="imgUploading">
         <div class="txt">
-          <span>我的靓（只需上传一张）</span>
+          <span>我的靓照（只需上传一张）</span>
         </div>
         <div id="moveinput" style="position: absolute;margin-top: 0">
           <div class="inputcontrol">
@@ -64,11 +64,11 @@ export default {
   methods: {
     handleWomanClick() {
       this.isActive = 'woman'
-      this.gender = 1
+      this.gender = 2
     },
     handleManClick() {
       this.isActive = 'man'
-      this.gender = 2
+      this.gender = 1
     },
     readFile: function(event) {
       var reader = new FileReader()
