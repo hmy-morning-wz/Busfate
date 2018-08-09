@@ -32,7 +32,7 @@
         <button class="sub-btn" :class="{ okBtn: isOk===true }" @click="sub_mes()">提交</button>
       </div>
     </div>
-    <ConfirmBan v-show="showDialog"  ref="dialog"></ConfirmBan>
+    <ConfirmBan v-show="showDialog" ref="dialog"></ConfirmBan>
   </div>
 </template>
 
@@ -48,11 +48,11 @@ export default {
     return {
       imgs: [],
       files: [],
-      isActive: "woman",
+      isActive: 'woman',
       isOk: false,
-      nicknameValue: "",
-      buslineValue: "",
-      phoneValue: "",
+      nicknameValue: '',
+      buslineValue: '',
+      phoneValue: '',
       showDialog: false,
       // dialogOption: object,
       tiptitle: "您有信息未填写正确哦~",
@@ -261,8 +261,8 @@ export default {
         !phoneReg.test(this.phoneValue) ||
         !nameReg.test(this.nicknameValue)
       ) {
-        this.$refs.dialog.isError = false;
-        this.showDialog = true;
+        this.$refs.dialog.isError = false
+        this.showDialog = true
         // this.tiptitle = "您有信息未填写正确哦~";
         this.$refs.dialog.modal.text = "";
         this.$refs.dialog.modal.title = this.tiptitle;
@@ -297,21 +297,21 @@ export default {
           console.log(this.gender);
           this.uploadMes();
         } else {
-          this.$refs.dialog.isError = false;
-          this.showDialog = true;
+          this.$refs.dialog.isError = false
+          this.showDialog = true
           // this.tiptitle = "您有信息未填写正确哦~";
-          this.$refs.dialog.modal.text = "";
-          this.$refs.dialog.modal.title = this.tiptitle;
+          this.$refs.dialog.modal.text = ''
+          this.$refs.dialog.modal.title = this.tiptitle
           this.$refs.dialog
             .confirm()
             .then(() => {
-              this.showDialog = false;
+              this.showDialog = false
               // next();
             })
             .catch(() => {
-              this.showDialog = false;
+              this.showDialog = false
               // next();
-            });
+            })
         }
       }
     }
@@ -496,7 +496,7 @@ body {
   height: -webkit-fill-available;
   min-height: 10.6667rem;
   max-height: 18rem;
-  background: url("../assets/images/BG@2x.png") no-repeat;
+  background: url('../assets/images/BG@2x.png') no-repeat;
   background-size: cover;
 }
 .contain_ban {
@@ -520,7 +520,7 @@ body {
     height: -webkit-fill-available;
     min-height: 10.6667rem;
     max-height: 22rem;
-    background: url("../assets/images/BG@2x.png") no-repeat;
+    background: url('../assets/images/BG@2x.png') no-repeat;
     background-size: cover;
   }
 }
