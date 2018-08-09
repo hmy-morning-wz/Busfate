@@ -3,13 +3,38 @@
     <Preheat showRankHeader="true"></Preheat>
     <div class="rank-list-warpper">
       <div class="ranking-list">
+
         <div class="rank-nav">
           <div class="woman-rank" @click="handleWomanClick" :class="{ active1: isActive==='woman' }">女神榜</div>
           <div class="man-rank" @click="handleManClick" :class="{ active1: isActive==='man' }">男神榜</div>
         </div>
+
         <div class="rank-nav-show">
-          <div class="show-list-wrapper">
-            <div class="show-list" v-if="lists" v-for="(item,index) in lists" :key="index">
+          <!-- 女神榜 -->
+          <div class="show-list-wrapper" v-if="this.gender === 2">
+            <div class="show-list" v-if="femaleLists.length" v-for="(item,index) in femaleLists" :key="index">
+              <div class="rank-list-top" v-show="index === 0||1||2? true:false">
+                <div class="top1-icon" v-show="index === 0? true:false"></div>
+                <div class="top2-icon" v-show="index === 1? true:false"></div>
+                <div class="top3-icon" v-show="index === 2? true:false"></div>
+              </div>
+              <div class="image-warpper">
+                <img :src="item.photo === 'string'||'' ? 'https://sit-img-citytsm.oss-cn-hangzhou.aliyuncs.com/20180808172059542sZGJxo.png' : (item.photo.indexOf('https') > -1 ? item.photo : `https://${item.photo}`)" alt="" class="image">
+                <div class="sys-number">NO.{{item.id}}</div>
+              </div>
+              <div class="name">{{item.nickname}}</div>
+              <div class="rode">{{item.lineNo}}路{{text}}神</div>
+              <div class="ballot">{{item.votes}}票</div>
+              <div class="ballot-wrapper" @click="handleBollot(item.id,index)">
+                <span class="icon"></span>
+                <span class="text">投票</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 男神榜 -->
+          <div class="show-list-wrapper" v-else>
+            <div class="show-list" v-if="maleLists" v-for="(item,index) in maleLists" :key="index">
               <div class="rank-list-top" v-show="index === 0||1||2? true:false">
                 <div class="top1-icon" v-show="index === 0? true:false"></div>
                 <div class="top2-icon" v-show="index === 1? true:false"></div>
@@ -29,6 +54,7 @@
             </div>
           </div>
         </div>
+
       </div>
       <div class="footer"></div>
       <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
@@ -50,7 +76,8 @@ export default {
       gender: 2,
       page: 1,
       pageSize: 9,
-      lists: [],
+      femaleLists: [],
+      maleLists: [],
       code: 20000
     }
   },
@@ -88,7 +115,7 @@ export default {
       this.isActive = 'woman'
       this.text = '女'
       this.gender = 2
-      this.lists = []
+      this.femaleLists = []
       this.page = 1
       this.getParticipanList()
     },
@@ -96,7 +123,7 @@ export default {
       this.isActive = 'man'
       this.text = '男'
       this.gender = 1
-      this.lists = []
+      this.maleLists = []
       this.page = 1
       this.getParticipanList()
     },
@@ -149,10 +176,16 @@ export default {
       // this.hideLoading()
       // console.log(res.data)
       if (res.code === '20000' && res.data) {
-        res.data.forEach(item => {
-          this.lists.push(item)
-          this.lists = this.lists
-        })
+        if (this.gender === 2) {
+          res.data.forEach(item => {
+            this.femaleLists.push(item)
+            // this.lists = this.lists
+          })
+        } else {
+          res.data.forEach(item => {
+            this.maleLists.push(item)
+          })
+        }
       }
       // if (this.gender === 2 && res.code === '20000' && res.data) {
       //   res.data.forEach(item => {
