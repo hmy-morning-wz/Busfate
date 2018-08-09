@@ -7,14 +7,19 @@
           <div class="woman-rank" @click="handleWomanClick()" :class="{ active1: isActive==='woman' }">女神榜</div>
           <div class="man-rank" @click="handleManClick()" :class="{ active1: isActive==='man' }">男神榜</div>
         </div>
-        <div class="rank-list-top" v-if="lists">
+        <!-- <div class="rank-list-top" v-if="lists">
           <div class="top1-icon"></div>
           <div class="top2-icon"></div>
           <div class="top3-icon"></div>
-        </div>
+        </div> -->
         <div class="rank-nav-show">
           <div class="show-list-wrapper">
             <div class="show-list" v-if="lists" v-for="(item,index) in lists" :key="index">
+              <div class="rank-list-top" v-show="index === 0||1||2? true:false">
+                <div class="top1-icon" v-show="index === 0? true:false"></div>
+                <div class="top2-icon" v-show="index === 1? true:false"></div>
+                <div class="top3-icon" v-show="index === 2? true:false"></div>
+              </div>
               <div class="image-warpper">
                 <img :src="item.photo === 'string'||'' ? 'https://sit-img-citytsm.oss-cn-hangzhou.aliyuncs.com/20180808172059542sZGJxo.png' : (item.photo.indexOf('https') > -1 ? item.photo : `https://${item.photo}`)" alt="" class="image">
                 <div class="sys-number">NO.{{item.id}}</div>
@@ -118,9 +123,7 @@ export default {
     },
     async getUserStatus() {
       let res = await this.$parent.request({
-        url: `http://10.0.3.116:9234/busLove/participant/getUserStatus?userId=${
-          window.localStorage.userId
-        }`,
+        url: `participant/getUserStatus?userId=${window.localStorage.userId}`,
         method: 'post'
         // data: params
       })
@@ -129,9 +132,9 @@ export default {
     },
     async getParticipanList() {
       let res = await this.$parent.request({
-        url: `http://10.0.3.116:9234/busLove/participant/getParticipantList?gender=${
-          this.gender
-        }&page=${this.page}&pageSize=${this.pageSize}`,
+        url: `participant/getParticipantList?gender=${this.gender}&page=${
+          this.page
+        }&pageSize=${this.pageSize}`,
         method: 'post'
         // data: params
       })
@@ -144,7 +147,7 @@ export default {
     },
     async getVote(participantId, index) {
       let res = await this.$parent.request({
-        url: 'http://10.0.3.116:9234/busLove/vote/voteParticipant',
+        url: 'vote/voteParticipant',
         method: 'post',
         data: {
           userId: window.localStorage.userId,
@@ -166,9 +169,7 @@ export default {
     },
     async getAlipayUserId() {
       let res = await this.$parent.request({
-        url: `http://10.0.2.190:9234/busLove/access/getAlipayUserId?auth_code=${
-          this.$route.query.auth_code
-        }`,
+        url: `access/getAlipayUserId?auth_code=${this.$route.query.auth_code}`,
         method: 'post'
       })
       // console.log(res.data)
@@ -233,10 +234,11 @@ export default {
 }
 
 .rank-list-top {
+  position: relative;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  flex-wrap: wrap;
   margin-top: 0.266667rem;
   .top1-icon {
     width: 2.8rem;
