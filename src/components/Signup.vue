@@ -216,10 +216,12 @@ export default {
           .confirm()
           .then(() => {
             this.showDialog = false;
+            this.$router.go(-1)
             // next();
           })
           .catch(() => {
             this.showDialog = false;
+            this.$router.go(-1)
             // next();
           });
       } else if (res.code === "40004") {
