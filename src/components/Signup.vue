@@ -27,7 +27,7 @@
       </div>
       <div style="text-align:center"><button class="sub-btn" :class="{ okBtn: isOk===true }" @click="sub_mes()">提交</button></div>
     </div>
-    <ConfirmBan v-show="showDialog" :dialog-option="dialogOption" ref="dialog"></ConfirmBan>
+    <ConfirmBan v-show="showDialog"  ref="dialog"></ConfirmBan>
   </div>
 </template>
 
@@ -49,7 +49,7 @@ export default {
       buslineValue: '',
       phoneValue: '',
       showDialog: false,
-      dialogOption: '',
+      // dialogOption: object,
       tiptitle: '您有信息未填写正确哦~',
       tipContent: '报名成功，我们会尽快审核哦',
       photoLink: '',
