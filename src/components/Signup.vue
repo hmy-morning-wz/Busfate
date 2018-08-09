@@ -32,7 +32,7 @@
         <button class="sub-btn" :class="{ okBtn: isOk===true }" @click="sub_mes()">提交</button>
       </div>
     </div>
-    <ConfirmBan v-show="showDialog"  ref="dialog"></ConfirmBan>
+    <ConfirmBan v-show="showDialog" ref="dialog"></ConfirmBan>
   </div>
 </template>
 
@@ -48,16 +48,16 @@ export default {
     return {
       imgs: [],
       files: [],
-      isActive: "woman",
+      isActive: 'woman',
       isOk: false,
-      nicknameValue: "",
-      buslineValue: "",
-      phoneValue: "",
+      nicknameValue: '',
+      buslineValue: '',
+      phoneValue: '',
       showDialog: false,
       // dialogOption: object,
-      tiptitle: "您有信息未填写正确哦~",
-      tipContent: "报名成功，我们会尽快审核哦",
-      photoLink: "",
+      tiptitle: '您有信息未填写正确哦~',
+      tipContent: '报名成功，我们会尽快审核哦',
+      photoLink: '',
       gender: 1
     }
   },
@@ -98,29 +98,30 @@ export default {
         // axios.post('http://10.0.3.116:9234/busLove/uploadFile/uploadOne', formData)
         that.$parent
           .request({
-            baseURL: 'https://sit-operation.allcitygo.com/buslove/uploadFile/uploadOne',
+            baseURL:
+              'https://sit-operation.allcitygo.com/buslove/uploadFile/uploadOne',
             headers: { 'Content-type': 'multipart/form-data' },
             method: 'POST',
             data: formData
           })
           .then(res => {
             if (res.code === '20000') {
-              that.photoLink = res.data;
-              console.log(that.photoLink);
+              that.photoLink = res.data
+              console.log(that.photoLink)
             }
           })
           .catch(e => {
-            console.log(e);
-          });
-      };
+            console.log(e)
+          })
+      }
     },
     del: function(e) {
-      e.target.parentNode.parentNode.removeChild(e.target.parentNode);
-      console.log(this.imgs);
-      this.imgs.splice(0, 1);
-      this.files.splice(0, 1);
-      console.log(this.imgs);
-      this.photoLink = "";
+      e.target.parentNode.parentNode.removeChild(e.target.parentNode)
+      console.log(this.imgs)
+      this.imgs.splice(0, 1)
+      this.files.splice(0, 1)
+      console.log(this.imgs)
+      this.photoLink = ''
       if (
         this.nicknameValue !== '' &&
         this.phoneValue !== '' &&
@@ -212,8 +213,8 @@ export default {
         !phoneReg.test(this.phoneValue) ||
         !nameReg.test(this.nicknameValue)
       ) {
-        this.$refs.dialog.isError = false;
-        this.showDialog = true;
+        this.$refs.dialog.isError = false
+        this.showDialog = true
         // this.tiptitle = "您有信息未填写正确哦~";
         this.$refs.dialog.modal.text = ''
         this.$refs.dialog.modal.title = this.tiptitle
@@ -229,24 +230,24 @@ export default {
           })
       } else {
         if (this.isOk) {
-          console.log(this.gender);
-          this.uploadMes();
+          console.log(this.gender)
+          this.uploadMes()
         } else {
-          this.$refs.dialog.isError = false;
-          this.showDialog = true;
+          this.$refs.dialog.isError = false
+          this.showDialog = true
           // this.tiptitle = "您有信息未填写正确哦~";
-          this.$refs.dialog.modal.text = "";
-          this.$refs.dialog.modal.title = this.tiptitle;
+          this.$refs.dialog.modal.text = ''
+          this.$refs.dialog.modal.title = this.tiptitle
           this.$refs.dialog
             .confirm()
             .then(() => {
-              this.showDialog = false;
+              this.showDialog = false
               // next();
             })
             .catch(() => {
-              this.showDialog = false;
+              this.showDialog = false
               // next();
-            });
+            })
         }
       }
     }
@@ -431,7 +432,7 @@ body {
   height: -webkit-fill-available;
   min-height: 10.6667rem;
   max-height: 18rem;
-  background: url("../assets/images/BG@2x.png") no-repeat;
+  background: url('../assets/images/BG@2x.png') no-repeat;
   background-size: cover;
 }
 .contain_ban {
@@ -455,7 +456,7 @@ body {
     height: -webkit-fill-available;
     min-height: 10.6667rem;
     max-height: 22rem;
-    background: url("../assets/images/BG@2x.png") no-repeat;
+    background: url('../assets/images/BG@2x.png') no-repeat;
     background-size: cover;
   }
 }
