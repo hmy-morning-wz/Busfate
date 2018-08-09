@@ -118,7 +118,7 @@ export default {
     },
     async getUserStatus() {
       let res = await this.$parent.request({
-        url: `http://10.0.3.116:9234/busLove/participant/getUserStatus?userId=${
+        url: `participant/getUserStatus?userId=${
           window.localStorage.userId
         }`,
         method: 'post'
@@ -129,7 +129,7 @@ export default {
     },
     async getParticipanList() {
       let res = await this.$parent.request({
-        url: `http://10.0.3.116:9234/busLove/participant/getParticipantList?gender=${
+        url: `participant/getParticipantList?gender=${
           this.gender
         }&page=${this.page}&pageSize=${this.pageSize}`,
         method: 'post'
@@ -144,7 +144,7 @@ export default {
     },
     async getVote(participantId, index) {
       let res = await this.$parent.request({
-        url: 'http://10.0.3.116:9234/busLove/vote/voteParticipant',
+        url: 'vote/voteParticipant',
         method: 'post',
         data: {
           userId: window.localStorage.userId,
@@ -166,7 +166,7 @@ export default {
     },
     async getAlipayUserId() {
       let res = await this.$parent.request({
-        url: `http://10.0.2.190:9234/busLove/access/getAlipayUserId?auth_code=${
+        url: `access/getAlipayUserId?auth_code=${
           this.$route.query.auth_code
         }`,
         method: 'post'
