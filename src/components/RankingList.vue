@@ -1,11 +1,11 @@
 <template>
   <div class="warpper">
-    <Preheat></Preheat>
+    <Preheat showRankHeader="true"></Preheat>
     <div class="rank-list-warpper">
       <div class="ranking-list">
         <div class="rank-nav">
-          <div class="woman-rank" @click="handleWomanClick()" :class="{ active1: isActive==='woman' }">女神榜</div>
-          <div class="man-rank" @click="handleManClick()" :class="{ active1: isActive==='man' }">男神榜</div>
+          <div class="woman-rank" @click="handleWomanClick" :class="{ active1: isActive==='woman' }">女神榜</div>
+          <div class="man-rank" @click="handleManClick" :class="{ active1: isActive==='man' }">男神榜</div>
         </div>
         <div class="rank-nav-show">
           <div class="show-list-wrapper">
@@ -135,8 +135,10 @@ export default {
         window.location.href = '#/Signup'
       }
     },
+    //  获取男女神榜
     async getParticipanList() {
-      this.showLoading()
+      // this.showLoading()
+      console.log(this.gender)
       let res = await this.$parent.request({
         url: `participant/getParticipantList?gender=${this.gender}&page=${
           this.page
@@ -144,7 +146,7 @@ export default {
         method: 'post'
         // data: params
       })
-      this.hideLoading()
+      // this.hideLoading()
       // console.log(res.data)
       if (res.code === '20000' && res.data) {
         res.data.forEach(item => {
