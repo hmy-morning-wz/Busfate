@@ -13,7 +13,7 @@
       </div>
       <div class="imgUploading">
         <div class="txt">
-          <span>我的靓照（只需上传一张）</span>
+          <span>我的靓（只需上传一张）</span>
         </div>
         <div id="moveinput" style="position: absolute;margin-top: 0">
           <div class="inputcontrol">
