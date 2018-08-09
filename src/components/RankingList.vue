@@ -7,11 +7,6 @@
           <div class="woman-rank" @click="handleWomanClick()" :class="{ active1: isActive==='woman' }">女神榜</div>
           <div class="man-rank" @click="handleManClick()" :class="{ active1: isActive==='man' }">男神榜</div>
         </div>
-        <!-- <div class="rank-list-top" v-if="lists">
-          <div class="top1-icon"></div>
-          <div class="top2-icon"></div>
-          <div class="top3-icon"></div>
-        </div> -->
         <div class="rank-nav-show">
           <div class="show-list-wrapper">
             <div class="show-list" v-if="lists" v-for="(item,index) in lists" :key="index">
@@ -136,7 +131,6 @@ export default {
           message: '您上传的照片未审核',
           showCancelButton: false
         })
-        this.dis = true
         return
       }
       if (this.status === 2) {
@@ -145,11 +139,9 @@ export default {
           message: '您已参加过活动了',
           showCancelButton: false
         })
-        this.dis = true
         return
       }
       if (this.status === 0 || 3) {
-        this.dis = false
         window.location.href = '#/Signup'
       }
     },
