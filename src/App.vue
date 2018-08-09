@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import { request,ajax } from './utils/request'
+import { request, ajax } from './utils/request'
 export default {
   name: 'App',
-  data () {
+  data() {
     return {
       request: request,
       ajax: ajax
@@ -19,6 +19,5 @@ export default {
 
 <style>
 #app {
-
 }
 </style>

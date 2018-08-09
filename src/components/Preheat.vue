@@ -67,19 +67,31 @@
         </div>
       </div>
     </div>
+    <img v-show="showRankHeader" class="rank-header" src="../assets/images/title_paihangbang@2x.png" alt="">
   </div>
 </template>
 
 <script>
 export default {
   name: 'Preheat',
+  props: {
+    showRankHeader: false
+  },
   data() {
-    return {};
+    return {}
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
+.rank-header{
+  width: 3.12rem;
+  height: .533333rem;
+  position: absolute;
+  bottom: .8rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .preheat {
   position: relative;
 }
