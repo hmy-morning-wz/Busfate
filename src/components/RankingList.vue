@@ -11,8 +11,9 @@
 
         <div class="rank-nav-show">
           <!-- 女神榜 -->
-          <div id="mescroll2" class="mescroll show-list-wrapper" v-show="this.gender === 2">
-            <div class="show-list" v-for="(item,index) in femaleLists" :key="index">
+          <div id="mescroll2" class="mescroll" v-show="this.gender === 2">
+            <div class="show-list-wrapper">
+               <div class="show-list" v-for="(item,index) in femaleLists" :key="index">
               <div class="rank-list-top" v-show="index === 0||1||2? true:false">
                 <div class="top1-icon" v-show="index === 0? true:false"></div>
                 <div class="top2-icon" v-show="index === 1? true:false"></div>
@@ -30,10 +31,12 @@
                 <span class="text">投票</span>
               </div>
             </div>
+            </div>
           </div>
 
           <!-- 男神榜 -->
-          <div id="mescroll1" class="mescroll show-list-wrapper" v-show="this.gender === 1">
+          <div id="mescroll1" class="mescroll" v-show="this.gender === 1">
+            <div class="show-list-wrapper">
             <div class="show-list" v-if="maleLists" v-for="(item,index) in maleLists" :key="index">
               <div class="rank-list-top" v-show="index === 0||1||2? true:false">
                 <div class="top1-icon" v-show="index === 0? true:false"></div>
@@ -52,6 +55,7 @@
                 <span class="text">投票</span>
               </div>
             </div>
+          </div>
           </div>
         </div>
 
@@ -143,9 +147,9 @@ export default {
           use: false
         },
         up: {
-          htmlNodata: '',
-          offset: 30,
-          isBounce: true,
+          htmlNodata: '-- 暂无更新数据 --',
+          offset: 80,
+          isBounce: false,
           auto: true,
           isBoth: false,
           htmlLoading: '',
@@ -273,9 +277,9 @@ export default {
           use: false
         },
         up: {
-          htmlNodata: '',
-          offset: 30,
-          isBounce: true,
+          htmlNodata: '-- 暂无更新数据 --',
+          offset: 80,
+          isBounce: false,
           auto: true,
           isBoth: false,
           callback: that.getParticipanList // 上拉加载回调,简写callback:function(page){upCallback(page);}
@@ -325,6 +329,9 @@ export default {
 .warpper {
   width: 100%;
   overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .rank-list-warpper {
   position: relative;
