@@ -91,8 +91,8 @@ export default {
         } else {
           that.isOk = false
         }
-        var formData = new FormData();
-        formData.append('file', that.files[0]);
+        var formData = new FormData()
+        formData.append('file', that.files[0])
         // var tmp = formData.getAll('file');
         // axios.post('http://10.0.3.116:9234/busLove/uploadFile/uploadOne', formData)
         that.$parent
