@@ -50,6 +50,7 @@ export default {
       gender: 2,
       page: 1,
       pageSize: 9,
+      lists: [],
       lists1: [],
       lists2: [],
       code: 20000,
@@ -161,11 +162,13 @@ export default {
       if (this.gender === 1 && res.code === '20000' && res.data) {
         res.data.forEach(item => {
           this.lists1.push(item)
+          this.lists = this.lists1
         })
       }
       if (this.gender === 2 && res.code === '20000' && res.data) {
         res.data.forEach(item => {
           this.lists2.push(item)
+          this.lists = this.lists2
         })
       }
       if (this.lists1.length === 0 && this.lists2.length === 0) {
