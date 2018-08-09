@@ -50,7 +50,8 @@ export default {
       gender: 2,
       page: 1,
       pageSize: 9,
-      lists: [],
+      lists1: [],
+      lists2: [],
       code: 20000,
       type: true
     }
@@ -93,16 +94,16 @@ export default {
       this.isActive = 'woman'
       this.text = '女'
       this.gender = 2
-      this.lists = []
-      this.page = 1
+      // this.lists2 = []
+      // this.page = 1
       this.getParticipanList()
     },
     handleManClick() {
       this.isActive = 'man'
       this.text = '男'
       this.gender = 1
-      this.lists = []
-      this.page = 1
+      // this.lists1 = []
+      // this.page = 1
       this.getParticipanList()
     },
     handleBollot(participantId, index) {
@@ -152,12 +153,17 @@ export default {
       })
       // this.hideLoading()
       // console.log(res.data)
-      if (res.code === '20000' && res.data) {
+      if (gender === 1 && res.code === '20000' && res.data) {
         res.data.forEach(item => {
-          this.lists.push(item)
+          this.lists1.push(item)
         })
       }
-      if (this.lists.length === 0) {
+      if (gender === 2 && res.code === '20000' && res.data) {
+        res.data.forEach(item => {
+          this.lists2.push(item)
+        })
+      }
+      if (this.lists1.length === 0 && this.lists2.length === 0) {
         this.type = false
       }
     },
@@ -180,7 +186,11 @@ export default {
         })
       } else if (this.code === '20000') {
         // this.newVote = res.data
-        this.lists[index].votes = res.data
+        if (this.gender === 1) {
+          this.lists1[index].votes = res.data
+        } else if (this.gender === 2) {
+          this.lists2[index].votes = res.data
+        }
       }
     },
     async getAlipayUserId() {
