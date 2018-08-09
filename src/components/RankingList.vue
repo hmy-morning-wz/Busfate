@@ -1,8 +1,8 @@
 <template>
   <div class="warpper">
-    <Preheat :showRankHeader="showRankHeader"></Preheat>
+    <Preheat :showRankHeader="type"></Preheat>
     <div class="rank-list-warpper">
-      <div class="ranking-list" @mouse="handleScroll()">
+      <div class="ranking-list" v-show="type">
         <div class="rank-nav">
           <div class="woman-rank" @click="handleWomanClick()" :class="{ active1: isActive==='woman' }">女神榜</div>
           <div class="man-rank" @click="handleManClick()" :class="{ active1: isActive==='man' }">男神榜</div>
@@ -29,9 +29,9 @@
             </div>
           </div>
         </div>
-        <div class="footer"></div>
-        <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
       </div>
+      <div class="footer"></div>
+      <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
     </div>
   </div>
 
@@ -44,7 +44,6 @@ export default {
     return {
       isActive: 'woman',
       text: '女',
-      showRankHeader: true,
       votes: 0,
       status: 0,
       dis: false,
@@ -52,7 +51,8 @@ export default {
       page: 1,
       pageSize: 9,
       lists: [],
-      code: 20000
+      code: 20000,
+      type: true
     }
   },
   created() {
@@ -151,6 +151,9 @@ export default {
       })
       // this.hideLoading()
       // console.log(res.data)
+      if (!res.data) {
+        this.type = false
+      }
       if (res.code === '20000' && res.data) {
         res.data.forEach(item => {
           this.lists.push(item)
