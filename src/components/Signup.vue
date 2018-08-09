@@ -9,7 +9,7 @@
         </div>
         <input type="text" class="busline" placeholder="最常乘坐的公交线路（如189）" v-model='buslineValue' @input="changeDisable()" style="width:80%">
         <span style="font-family: PingFangSC-Regular;font-size: 0.4rem;color: #333333;">路</span>
-        <input type="text" class="phoneNo" placeholder="手机号码（为您保密，仅用于获奖联系哦）" v-model='phoneValue' @input="changeDisable()" />
+        <input type="text" class="phoneNo" placeholder="手机号码（为您保密，仅用于获奖联系哦）" maxlength="11" v-model='phoneValue' @input="changeDisable()" />
       </div>
       <div class="imgUploading">
         <div class="txt">

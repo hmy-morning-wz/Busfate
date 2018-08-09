@@ -140,10 +140,11 @@ export default {
         window.location.href = '#/Signup'
       }
     },
-    async getParticipanList() {
+    async getParticipanList(gender) {
       // this.showLoading()
+      let gen = gender || this.gender
       let res = await this.$parent.request({
-        url: `participant/getParticipantList?gender=${this.gender}&page=${
+        url: `participant/getParticipantList?gender=${gen}&page=${
           this.page
         }&pageSize=${this.pageSize}`,
         method: 'post'
@@ -216,6 +217,7 @@ export default {
       }
     })
     this.getParticipanList()
+    this.getParticipanList(1)
   },
   components: {
     Preheat: Preheat
