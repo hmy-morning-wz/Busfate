@@ -195,12 +195,12 @@ export default {
     },
     sub_mes: function() {
       var phoneReg = /1[3|4|5|7|8][0-9](\d|\*){4}\d{4}/;
-      var nameReg = /^[0-9a-zA-Z]{1,20}$/;
+      var nameReg = /^[0-9a-zA-Z\u4E00-\u9FA5]{1,20}$/;
       if (
         !phoneReg.test(this.phoneValue) ||
         !nameReg.test(this.nicknameValue)
       ) {
-        this.$refs.dialog.isError = true;
+        this.$refs.dialog.isError = false;
         this.showDialog = true;
         // this.tiptitle = "您有信息未填写正确哦~";
         this.$refs.dialog.modal.text = "";
