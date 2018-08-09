@@ -144,8 +144,8 @@ export default {
         },
         up: {
           htmlNodata: '',
-          offset: 50,
-          isBounce: false,
+          offset: 30,
+          isBounce: true,
           auto: true,
           isBoth: false,
           htmlLoading: '',
@@ -274,8 +274,8 @@ export default {
         },
         up: {
           htmlNodata: '',
-          offset: 50,
-          isBounce: false,
+          offset: 30,
+          isBounce: true,
           auto: true,
           isBoth: false,
           callback: that.getParticipanList // 上拉加载回调,简写callback:function(page){upCallback(page);}
