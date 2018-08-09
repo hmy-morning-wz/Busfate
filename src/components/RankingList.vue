@@ -163,7 +163,7 @@ export default {
       this.status = res.data.status
     },
     async getParticipanList() {
-      this.showLoading()
+      // this.showLoading()
       let res = await this.$parent.request({
         url: `participant/getParticipantList?gender=${this.gender}&page=${
           this.page
@@ -171,7 +171,7 @@ export default {
         method: 'post'
         // data: params
       })
-      this.hideLoading()
+      // this.hideLoading()
       // console.log(res.data)
       if (res.code === '20000' && res.data) {
         res.data.forEach(item => {
