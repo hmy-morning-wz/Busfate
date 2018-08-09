@@ -232,7 +232,7 @@ export default {
   }
 }
 
-// mui.previewImage()
+mui.previewImage()
 </script>
 
 <style scoped>
