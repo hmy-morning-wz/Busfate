@@ -56,22 +56,8 @@ export default {
     }
   },
   created() {
-    // 获取男神女神列表
-    this.getParticipanList()
     // 获取用户id
     this.getAlipayUserId()
-    // this.getUserStatus()
-    // eslint-disable-next-line
-    // AlipayJSBridge.call(
-    //   'startShare',
-    //   {
-    //     bizType: '', // 业务标识，为空时将会显示默认的分享渠道列表。
-    //     onlySelectChannel: ['ALPContact', 'Weixin'] // 当用户选择该数组内指定的分享渠道时，仅返回渠道名，而不是真正开始分享
-    //   },
-    //   function(data) {
-    //     alert(data)
-    //   }
-    // )
   },
   methods: {
     // 隐藏菊花
@@ -125,6 +111,15 @@ export default {
     handleSignUpClick() {
       // 获取用户报名状态
       this.getUserStatus()
+    },
+    async getUserStatus() {
+      let res = await this.$parent.request({
+        url: `participant/getUserStatus?userId=${window.localStorage.userId}`,
+        method: 'post'
+        // data: params
+      })
+      // console.log(res.data)
+      this.status = res.data.status
       if (this.status === 1) {
         this.$messagebox.alert('', {
           title: '温馨提示',
@@ -144,15 +139,6 @@ export default {
       if (this.status === 0 || 3) {
         window.location.href = '#/Signup'
       }
-    },
-    async getUserStatus() {
-      let res = await this.$parent.request({
-        url: `participant/getUserStatus?userId=${window.localStorage.userId}`,
-        method: 'post'
-        // data: params
-      })
-      // console.log(res.data)
-      this.status = res.data.status
     },
     async getParticipanList() {
       // this.showLoading()
