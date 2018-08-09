@@ -68,16 +68,16 @@ export default {
     // 获取男神女神列表
     this.getParticipanList()
     // eslint-disable-next-line
-    AlipayJSBridge.call(
-      'startShare',
-      {
-        bizType: '', // 业务标识，为空时将会显示默认的分享渠道列表。
-        onlySelectChannel: ['ALPContact', 'Weixin'] // 当用户选择该数组内指定的分享渠道时，仅返回渠道名，而不是真正开始分享
-      },
-      function(data) {
-        alert(data)
-      }
-    )
+    // AlipayJSBridge.call(
+    //   'startShare',
+    //   {
+    //     bizType: '', // 业务标识，为空时将会显示默认的分享渠道列表。
+    //     onlySelectChannel: ['ALPContact', 'Weixin'] // 当用户选择该数组内指定的分享渠道时，仅返回渠道名，而不是真正开始分享
+    //   },
+    //   function(data) {
+    //     alert(data)
+    //   }
+    // )
   },
   methods: {
     handleWomanClick() {
@@ -107,6 +107,7 @@ export default {
           showCancelButton: false
         })
         this.dis = true
+        return
       }
       if (this.status === 2) {
         this.$messagebox.alert('', {
@@ -115,6 +116,7 @@ export default {
           showCancelButton: false
         })
         this.dis = true
+        return
       }
       if (this.status === 0 || 3) {
         this.dis = false
@@ -154,7 +156,7 @@ export default {
           participantId: participantId
         }
       })
-      console.log(res)
+      // console.log(res)
       this.code = res.code
       if (this.code === '40004') {
         this.$messagebox.alert('', {

@@ -1,6 +1,5 @@
 const Index = r => require(['../views/index'], r)
 const error = r => require(['../views/error'], r)
-const SelectExchange = r => require(['../components/SelectExchange'], r)
 const BusCode = r => require(['../components/BusCode'], r)
 const RankingList = r => require(['../components/RankingList'], r)
 const Signup = r => require(['../components/Signup'], r)
@@ -16,10 +15,6 @@ const routes = [{
   path: '/',
   component: Index,
   name: 'index'
-}, {
-  path: '/SelectExchange',
-  component: SelectExchange,
-  name: 'SelectExchange'
 }, {
   path: '/BusCode',
   component: BusCode,

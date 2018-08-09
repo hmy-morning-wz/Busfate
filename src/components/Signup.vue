@@ -2,40 +2,45 @@
   <div class="signup">
     <div class="contain_ban">
       <div class="message-ban">
-        <input type="text" class="nickname" placeholder="昵称（支持英文大小写和中文）" v-model='nicknameValue' @input="changeDisable()"/>
+        <input type="text" class="nickname" placeholder="昵称（支持英文大小写和中文）" v-model='nicknameValue' @input="changeDisable()" />
         <div class="check-sex">
           <div class="woman-option" @click="handleWomanClick()" :class="{ active: isActive==='woman' }">我是女神</div>
           <div class="man-option" @click="handleManClick()" :class="{ active: isActive==='man' }">我是男神</div>
         </div>
-        <input type="text" class="busline" placeholder="最常乘坐的公交线路（如189）" v-model='buslineValue' @input="changeDisable()" style="width:80%"><span style="font-family: PingFangSC-Regular;font-size: 0.4rem;color: #333333;">路</span>
-        <input type="text" class="phoneNo" placeholder="手机号码（为您保密，仅用于获奖联系哦）" v-model='phoneValue' @input="changeDisable()"/>
+        <input type="text" class="busline" placeholder="最常乘坐的公交线路（如189）" v-model='buslineValue' @input="changeDisable()" style="width:80%">
+        <span style="font-family: PingFangSC-Regular;font-size: 0.4rem;color: #333333;">路</span>
+        <input type="text" class="phoneNo" placeholder="手机号码（为您保密，仅用于获奖联系哦）" v-model='phoneValue' @input="changeDisable()" />
       </div>
       <div class="imgUploading">
-          <div class="txt"><span>我的靓照（只需上传一张）</span></div>
-          <div id="moveinput" style="position: absolute;margin-top: 0">
-              <div class="inputcontrol">
-                  <input @change="readFile($event)" type="file" id="input1" ref="pathClear" accept="image*" capture="camera" class="inputstyle"  @input="changeDisable()" >
-              </div>
-          </div>          
-          <div class="picture" v-if="imgs.length>0" v-for='(item ,index ) in imgs' :key="index">
-            <div class="imgcont" style="float:left;position:relative">
-              <img class="showimg" :src="item" data-preview-src="" data-preview-group="1"/>
-              <img src="../assets/images/cancel_delete_remove.png" class="delete" @click="del($event)"/>
-            </div>
+        <div class="txt">
+          <span>我的靓照（只需上传一张）</span>
+        </div>
+        <div id="moveinput" style="position: absolute;margin-top: 0">
+          <div class="inputcontrol">
+            <input @change="readFile($event)" type="file" id="input1" ref="pathClear" accept="image*" capture="camera" class="inputstyle" @input="changeDisable()">
           </div>
-          <div style="clear:both;"></div>
+        </div>
+        <div class="picture" v-if="imgs.length>0" v-for='(item ,index ) in imgs' :key="index">
+          <div class="imgcont" style="float:left;position:relative">
+            <img class="showimg" :src="item" data-preview-src="" data-preview-group="1" />
+            <img src="../assets/images/cancel_delete_remove.png" class="delete" @click="del($event)" />
+          </div>
+        </div>
+        <div style="clear:both;"></div>
       </div>
-      <div style="text-align:center"><button class="sub-btn" :class="{ okBtn: isOk===true }" @click="sub_mes()">提交</button></div>
+      <div style="text-align:center">
+        <button class="sub-btn" :class="{ okBtn: isOk===true }" @click="sub_mes()">提交</button>
+      </div>
     </div>
     <ConfirmBan v-show="showDialog" :dialog-option="dialogOption" ref="dialog"></ConfirmBan>
   </div>
 </template>
 
 <script>
-import ConfirmBan from "./ConfirmBan.vue";
+import ConfirmBan from './ConfirmBan.vue'
 // import axios from 'axios'
 export default {
-  name: "Signup",
+  name: 'Signup',
   components: {
     ConfirmBan
   },
@@ -54,181 +59,183 @@ export default {
       tipContent: '报名成功，我们会尽快审核哦',
       photoLink: '',
       gender: 1
-    };
+    }
   },
   methods: {
     handleWomanClick() {
-      this.isActive = 'woman';
+      this.isActive = 'woman'
       this.gender = 1
     },
     handleManClick() {
-      this.isActive = 'man';
+      this.isActive = 'man'
       this.gender = 2
     },
     readFile: function(event) {
-      var reader = new FileReader();
+      var reader = new FileReader()
       // console.log(event.target.files[0]);
-      this.files.push(event.target.files[0]);
-      console.log(this.files[0]);
-      reader.readAsDataURL(event.target.files[0]);
-      var that = this;
+      this.files.push(event.target.files[0])
+      // console.log(this.files[0])
+      reader.readAsDataURL(event.target.files[0])
+      var that = this
       reader.onload = function() {
-        that.imgs.push(reader.result);
-        that.$refs.pathClear.value = "";
+        that.imgs.push(reader.result)
+        that.$refs.pathClear.value = ''
         // console.log(reader.result);
         if (
-          that.nicknameValue !== "" &&
-          that.phoneValue !== "" &&
-          that.buslineValue !== "" &&
+          that.nicknameValue !== '' &&
+          that.phoneValue !== '' &&
+          that.buslineValue !== '' &&
           that.imgs.length !== 0
         ) {
-          that.isOk = true;
+          that.isOk = true
         } else {
-          that.isOk = false;
+          that.isOk = false
         }
-        var formData = new FormData();
-        formData.append('file', that.files[0]);
+        var formData = new FormData()
+        formData.append('file', that.files[0])
         // var tmp = formData.getAll('file');
         // axios.post('http://10.0.3.116:9234/busLove/uploadFile/uploadOne', formData)
-        that.$parent.request({
-          baseURL: 'http://sit-operation.allcitygo.com:80/buslove/uploadFile/uploadOne',
-          headers:{'Content-type':'multipart/form-data'},
-          method: 'POST',
-          data:formData
-        })
-        .then(res => {
-          if (res.code ==='20000') {
-            that.photoLink = res.data
-            console.log(that.photoLink)
-          }
-        }).catch(e => {
-          console.log(e)
-        })
-      };
+        that.$parent
+          .request({
+            baseURL: 'uploadFile/uploadOne',
+            headers: { 'Content-type': 'multipart/form-data' },
+            method: 'POST',
+            data: formData
+          })
+          .then(res => {
+            if (res.code === '20000') {
+              that.photoLink = res.data
+              // console.log(that.photoLink)
+            }
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      }
     },
     del: function(e) {
-      e.target.parentNode.parentNode.removeChild(e.target.parentNode);
-      console.log(this.imgs);
-      this.imgs.splice(0, 1);
-      console.log(this.imgs);
+      e.target.parentNode.parentNode.removeChild(e.target.parentNode)
+      // console.log(this.imgs)
+      this.imgs.splice(0, 1)
+      // console.log(this.imgs)
       if (
-        this.nicknameValue !== "" &&
-        this.phoneValue !== "" &&
-        this.buslineValue !== "" &&
+        this.nicknameValue !== '' &&
+        this.phoneValue !== '' &&
+        this.buslineValue !== '' &&
         this.imgs.length !== 0
       ) {
-        this.isOk = true;
+        this.isOk = true
       } else {
-        this.isOk = false;
+        this.isOk = false
       }
     },
     changeDisable: function() {
       if (
-        this.nicknameValue !== "" &&
-        this.phoneValue !== "" &&
-        this.buslineValue !== "" &&
+        this.nicknameValue !== '' &&
+        this.phoneValue !== '' &&
+        this.buslineValue !== '' &&
         this.imgs.length !== 0
       ) {
-        this.isOk = true;
+        this.isOk = true
       } else {
-        this.isOk = false;
+        this.isOk = false
       }
     },
-    async uploadMes () {
+    async uploadMes() {
       let res = await this.$parent.request({
         // url: `http://sit-operation.allcitygo.com:9109/prefer/icons`,
-        url: `http://sit-operation.allcitygo.com:80/buslove/participant/apply`,
+        url: 'participant/apply',
         method: 'post',
         data: {
-          'gender': this.gender,
-          'lineNo': this.buslineValue,
-          'nickname': this.nicknameValue,
-          'photo': this.photoLink,
-          'telephone': this.phoneValue,
-          'userId': window.localStorage.userId
+          gender: this.gender,
+          lineNo: this.buslineValue,
+          nickname: this.nicknameValue,
+          photo: this.photoLink,
+          telephone: this.phoneValue,
+          userId: window.localStorage.userId
         }
       })
-      if (res.code === '20000'){
-        this.$refs.dialog.isError = true;
-        this.showDialog = true;
-        this.$refs.dialog.modal.title = "";
-        this.$refs.dialog.modal.text = this.tipContent;
+      if (res.code === '20000') {
+        this.$refs.dialog.isError = true
+        this.showDialog = true
+        this.$refs.dialog.modal.title = ''
+        this.$refs.dialog.modal.text = this.tipContent
         this.$refs.dialog
           .confirm()
           .then(() => {
-            this.showDialog = false;
+            this.showDialog = false
             // next();
           })
           .catch(() => {
-            this.showDialog = false;
+            this.showDialog = false
             // next();
-          });
-      } else if(res.code === '40004') {
-        this.$refs.dialog.isError = false;
-        this.showDialog = true;
-        this.$refs.dialog.modal.title = "";
-        this.$refs.dialog.modal.text = '该用户已报名';
+          })
+      } else if (res.code === '40004') {
+        this.$refs.dialog.isError = false
+        this.showDialog = true
+        this.$refs.dialog.modal.title = ''
+        this.$refs.dialog.modal.text = '该用户已报名'
         this.$refs.dialog
           .confirm()
           .then(() => {
-            this.showDialog = false;
+            this.showDialog = false
             // next();
           })
           .catch(() => {
-            this.showDialog = false;
+            this.showDialog = false
             // next();
-          });
+          })
       } else {
-        this.$refs.dialog.isError = false;
-        this.showDialog = true;
-        this.$refs.dialog.modal.title = "";
-        this.$refs.dialog.modal.text = '网络繁忙';
+        this.$refs.dialog.isError = false
+        this.showDialog = true
+        this.$refs.dialog.modal.title = ''
+        this.$refs.dialog.modal.text = '网络繁忙'
         this.$refs.dialog
           .confirm()
           .then(() => {
-            this.showDialog = false;
+            this.showDialog = false
             // next();
           })
           .catch(() => {
-            this.showDialog = false;
+            this.showDialog = false
             // next();
-          });
+          })
       }
     },
     sub_mes: function() {
-      var phoneReg = /1[3|4|5|7|8][0-9](\d|\*){4}\d{4}/;
-      var nameReg = /^[0-9a-zA-Z]{1,20}$/;
+      var phoneReg = /1[3|4|5|7|8][0-9](\d|\*){4}\d{4}/
+      var nameReg = /^[0-9a-zA-Z\u4E00-\u9FA5]{1,20}$/
       if (
         !phoneReg.test(this.phoneValue) ||
         !nameReg.test(this.nicknameValue)
       ) {
-        this.$refs.dialog.isError = true;
-        this.showDialog = true;
+        this.$refs.dialog.isError = true
+        this.showDialog = true
         // this.tiptitle = "您有信息未填写正确哦~";
-        this.$refs.dialog.modal.text = "";
-        this.$refs.dialog.modal.title = this.tiptitle;
+        this.$refs.dialog.modal.text = ''
+        this.$refs.dialog.modal.title = this.tiptitle
         this.$refs.dialog
           .confirm()
           .then(() => {
-            this.showDialog = false;
+            this.showDialog = false
             // next();
           })
           .catch(() => {
-            this.showDialog = false;
+            this.showDialog = false
             // next();
-          });
+          })
       } else {
-        console.log(this.gender)
+        // console.log(this.gender)
         this.uploadMes()
       }
     }
   },
-  created(){
+  created() {
     // console.log(this.$axios)
   }
-};
-
-mui.previewImage();
+}
+// eslint-disable-next-line
+mui.previewImage()
 </script>
 
 <style>
@@ -402,7 +409,7 @@ body {
   padding-top: 0.1rem;
   width: 10rem;
   height: -webkit-fill-available;
-  background: url("../assets/images/BG@2x.png") no-repeat;
+  background: url('../assets/images/BG@2x.png') no-repeat;
   background-size: cover;
 }
 .contain_ban {
@@ -414,7 +421,7 @@ body {
   padding-bottom: 2rem;
   overflow: hidden;
   background-color: white;
-  background: url("../assets/images/BG2@2x.png") no-repeat;
+  background: url('../assets/images/BG2@2x.png') no-repeat;
   background-size: cover;
   border-radius: 35px;
 }
@@ -475,7 +482,7 @@ body {
   width: 3.7333rem;
   margin-top: 0.3rem;
   margin-right: 0.24rem;
-  background: url("../assets/images/addpic.png");
+  background: url('../assets/images/addpic.png');
   background-size: 100% 100%;
   position: relative;
   float: left;
