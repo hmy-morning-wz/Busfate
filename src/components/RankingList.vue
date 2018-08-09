@@ -61,12 +61,11 @@ export default {
     }
   },
   created() {
-    // 获取用户id
-    this.getAlipayUserId()
-    // 获取用户报名状态
-    this.getUserStatus()
     // 获取男神女神列表
     this.getParticipanList()
+    // 获取用户id
+    this.getAlipayUserId()
+    // this.getUserStatus()
     // eslint-disable-next-line
     // AlipayJSBridge.call(
     //   'startShare',
@@ -80,6 +79,35 @@ export default {
     // )
   },
   methods: {
+    // 隐藏菊花
+    hideLoading: function() {
+      window.yl.call('hideLoading')
+    },
+    // 菊花
+    showLoading: function(opt) {
+      // eslint-disable-next-line
+      opt = $.extend(
+        true,
+        {
+          title: '加载中...',
+          duration: 3000
+        },
+        opt
+      )
+
+      window.yl.call(
+        'showLoading',
+        {
+          content: opt.title,
+          duration: opt.duration
+        },
+        {
+          onSuccess: function(a) {
+            console.log('success')
+          }
+        }
+      )
+    },
     handleWomanClick() {
       this.isActive = 'woman'
       this.text = '女'
@@ -100,6 +128,8 @@ export default {
       this.getVote(participantId, index)
     },
     handleSignUpClick() {
+      // 获取用户报名状态
+      this.getUserStatus()
       if (this.status === 1) {
         this.$messagebox.alert('', {
           title: '温馨提示',
@@ -133,6 +163,7 @@ export default {
       this.status = res.data.status
     },
     async getParticipanList() {
+      this.showLoading()
       let res = await this.$parent.request({
         url: `participant/getParticipantList?gender=${this.gender}&page=${
           this.page
@@ -140,6 +171,7 @@ export default {
         method: 'post'
         // data: params
       })
+      this.hideLoading()
       // console.log(res.data)
       if (res.code === '20000' && res.data) {
         res.data.forEach(item => {
@@ -202,6 +234,7 @@ export default {
         // console.log(false)
       }
     })
+    this.getParticipanList()
   },
   components: {
     Preheat: Preheat
