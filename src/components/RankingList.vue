@@ -11,8 +11,8 @@
 
         <div class="rank-nav-show">
           <!-- 女神榜 -->
-          <div class="show-list-wrapper" v-if="this.gender === 2">
-            <div class="show-list" v-if="femaleLists.length" v-for="(item,index) in femaleLists" :key="index">
+          <div id="mescroll2" class="mescroll show-list-wrapper" v-show="this.gender === 2">
+            <div class="show-list" v-for="(item,index) in femaleLists" :key="index">
               <div class="rank-list-top" v-show="index === 0||1||2? true:false">
                 <div class="top1-icon" v-show="index === 0? true:false"></div>
                 <div class="top2-icon" v-show="index === 1? true:false"></div>
@@ -25,7 +25,7 @@
               <div class="name">{{item.nickname}}</div>
               <div class="rode">{{item.lineNo}}路{{text}}神</div>
               <div class="ballot">{{item.votes}}票</div>
-              <div class="ballot-wrapper" @click="handleBollot(item.id,index)">
+              <div class="ballot-wrapper" @click="handleBollot(item.id,index, 2)">
                 <span class="icon"></span>
                 <span class="text">投票</span>
               </div>
@@ -33,7 +33,7 @@
           </div>
 
           <!-- 男神榜 -->
-          <div class="show-list-wrapper" v-else>
+          <div id="mescroll1" class="mescroll show-list-wrapper" v-show="this.gender === 1">
             <div class="show-list" v-if="maleLists" v-for="(item,index) in maleLists" :key="index">
               <div class="rank-list-top" v-show="index === 0||1||2? true:false">
                 <div class="top1-icon" v-show="index === 0? true:false"></div>
@@ -47,7 +47,7 @@
               <div class="name">{{item.nickname}}</div>
               <div class="rode">{{item.lineNo}}路{{text}}神</div>
               <div class="ballot">{{item.votes}}票</div>
-              <div class="ballot-wrapper" @click="handleBollot(item.id,index)">
+              <div class="ballot-wrapper" @click="handleBollot(item.id,index, 1)">
                 <span class="icon"></span>
                 <span class="text">投票</span>
               </div>
@@ -75,10 +75,13 @@ export default {
       dis: false,
       gender: 2,
       page: 1,
-      pageSize: 9,
+      pageSize: 3,
       femaleLists: [],
       maleLists: [],
-      code: 20000
+      code: 20000,
+      flag: true,
+      mescroll2: null,
+      mescroll1: null
     }
   },
   created() {
@@ -115,17 +118,40 @@ export default {
       this.isActive = 'woman'
       this.text = '女'
       this.gender = 2
-      this.femaleLists = []
+      // this.femaleLists = []
       this.page = 1
-      this.getParticipanList()
+      // this.mescroll2.clearDataList()
+      // this.changeGenderData()
+      // this.getParticipanList()
     },
     handleManClick() {
       this.isActive = 'man'
       this.text = '男'
       this.gender = 1
-      this.maleLists = []
+      // this.maleLists = []
       this.page = 1
-      this.getParticipanList()
+      // this.mescroll1.clearDataList()
+      this.changeGenderData()
+      // this.getParticipanList()
+    },
+    changeGenderData () {
+      let that = this
+      // eslint-disable-next-line
+      this.mescroll1 = new MeScroll('mescroll1', {
+        // 第一个参数"mescroll"对应上面布局结构div的id
+        down: {
+          use: false
+        },
+        up: {
+          htmlNodata: '',
+          offset: 50,
+          isBounce: false,
+          auto: true,
+          isBoth: false,
+          htmlLoading: '',
+          callback: that.getParticipanList // 上拉加载回调,简写callback:function(page){upCallback(page);}
+        }
+      })
     },
     handleBollot(participantId, index) {
       this.getVote(participantId, index)
@@ -163,12 +189,12 @@ export default {
       }
     },
     //  获取男女神榜
-    async getParticipanList() {
+    async getParticipanList(page) {
       // this.showLoading()
-      console.log(this.gender)
+      console.log(page.num)
       let res = await this.$parent.request({
         url: `participant/getParticipantList?gender=${this.gender}&page=${
-          this.page
+          page.num
         }&pageSize=${this.pageSize}`,
         method: 'post'
         // data: params
@@ -176,15 +202,21 @@ export default {
       // this.hideLoading()
       // console.log(res.data)
       if (res.code === '20000' && res.data) {
+        // this.flag = true // 可以请求了
+        // this.mescroll.endUpScroll(true)
         if (this.gender === 2) {
+          this.mescroll2.endSuccess()
           res.data.forEach(item => {
             this.femaleLists.push(item)
             // this.lists = this.lists
           })
+          if (res.totalSize < this.pageSize) this.mescroll2.endUpScroll(true)
         } else {
+          this.mescroll1.endSuccess()
           res.data.forEach(item => {
             this.maleLists.push(item)
           })
+          if (res.totalSize < this.pageSize) this.mescroll1.endUpScroll(true)
         }
       }
       // if (this.gender === 2 && res.code === '20000' && res.data) {
@@ -197,7 +229,7 @@ export default {
       //   this.type = false
       // }
     },
-    async getVote(participantId, index) {
+    async getVote(participantId, index, type) {
       let res = await this.$parent.request({
         url: 'vote/voteParticipant',
         method: 'post',
@@ -215,13 +247,10 @@ export default {
           showCancelButton: false
         })
       } else if (this.code === '20000') {
-        this.lists[index].votes = res.data
+        // if (type === 2) this.femaleLists[index].votes = res.data
         // this.newVote = res.data
-        // if (this.gender === 1) {
-        //   this.lists1[index].votes = res.data
-        // } else if (this.gender === 2) {
-        //   this.lists2[index].votes = res.data
-        // }
+        if (this.gender === 2) this.femaleLists[index].votes = res.data
+        else this.maleLists[index].votes = res.data
       }
     },
     async getAlipayUserId() {
@@ -233,31 +262,55 @@ export default {
       if (res.code === '20000' && res.data) {
         window.localStorage.userId = res.data
       }
+    },
+    changeGender() {
+      // if (this.mescroll2) this.mescroll2.destroy()
+      let that = this
+      // eslint-disable-next-line
+      this.mescroll2 = new MeScroll('mescroll2', {
+        // 第一个参数"mescroll"对应上面布局结构div的id
+        down: {
+          use: false
+        },
+        up: {
+          htmlNodata: '',
+          offset: 50,
+          isBounce: false,
+          auto: true,
+          isBoth: false,
+          callback: that.getParticipanList // 上拉加载回调,简写callback:function(page){upCallback(page);}
+        }
+      })
     }
   },
   mounted() {
-    let that = this
-    document.addEventListener('scroll', function() {
-      var scrollTop =
-        document.body.scrollTop ||
-        document.documentElement.scrollTop ||
-        window.pageYOffset
-      // console.log(document.body.scrollHeight)
-      // console.log(window.innerHeight)
-      // console.log(scrollTop)
-      if (
-        document.body.scrollHeight ===
-        Math.round(scrollTop) + window.innerHeight
-      ) {
-        // console.log(true)
-        that.page += 1
-        // console.log(that.page)
-        that.getParticipanList()
-      } else {
-        // console.log(false)
-      }
-    })
-    this.getParticipanList()
+    // let that = this
+    // document.addEventListener('scroll', function() {
+    //   var scrollTop =
+    //     document.body.scrollTop ||
+    //     document.documentElement.scrollTop ||
+    //     window.pageYOffset
+    //   // console.log(document.body.scrollHeight)
+    //   // console.log(window.innerHeight)
+    //   // console.log(scrollTop)
+    //   if (
+    //     document.body.scrollHeight ===
+    //     Math.round(scrollTop) + window.innerHeight
+    //   ) {
+    //     // console.log(true)
+    //     that.page++
+    //     // console.log(that.page)
+    //     if (that.flag) {
+    //       that.flag = false
+    //       that.getParticipanList()
+    //     }
+    //   } else {
+    //     // console.log(false)
+    //   }
+    // })
+
+    this.changeGender()
+    // this.getParticipanList()
   },
   components: {
     Preheat: Preheat
@@ -266,6 +319,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.mescroll-hardware{
+  display: none!important;
+}
 .warpper {
   width: 100%;
   overflow: hidden;
