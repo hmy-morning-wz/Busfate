@@ -2,7 +2,7 @@
   <div class="warpper">
     <Preheat :showRankHeader="showRankHeader"></Preheat>
     <div class="rank-list-warpper">
-      <div class="ranking-list" @mouse="handleScroll()">
+      <div class="ranking-list">
         <div class="rank-nav">
           <div class="woman-rank" @click="handleWomanClick()" :class="{ active1: isActive==='woman' }">女神榜</div>
           <div class="man-rank" @click="handleManClick()" :class="{ active1: isActive==='man' }">男神榜</div>
@@ -56,22 +56,8 @@ export default {
     }
   },
   created() {
-    // 获取男神女神列表
-    this.getParticipanList()
     // 获取用户id
     this.getAlipayUserId()
-    // this.getUserStatus()
-    // eslint-disable-next-line
-    // AlipayJSBridge.call(
-    //   'startShare',
-    //   {
-    //     bizType: '', // 业务标识，为空时将会显示默认的分享渠道列表。
-    //     onlySelectChannel: ['ALPContact', 'Weixin'] // 当用户选择该数组内指定的分享渠道时，仅返回渠道名，而不是真正开始分享
-    //   },
-    //   function(data) {
-    //     alert(data)
-    //   }
-    // )
   },
   methods: {
     // 隐藏菊花
