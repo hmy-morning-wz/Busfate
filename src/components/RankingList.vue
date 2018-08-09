@@ -1,8 +1,8 @@
 <template>
   <div class="warpper">
-    <Preheat :showRankHeader="type"></Preheat>
+    <Preheat></Preheat>
     <div class="rank-list-warpper">
-      <div class="ranking-list" v-show="type">
+      <div class="ranking-list">
         <div class="rank-nav">
           <div class="woman-rank" @click="handleWomanClick()" :class="{ active1: isActive==='woman' }">女神榜</div>
           <div class="man-rank" @click="handleManClick()" :class="{ active1: isActive==='man' }">男神榜</div>
@@ -51,10 +51,7 @@ export default {
       page: 1,
       pageSize: 9,
       lists: [],
-      lists1: [],
-      lists2: [],
-      code: 20000,
-      type: true
+      code: 20000
     }
   },
   created() {
@@ -69,14 +66,10 @@ export default {
     // 菊花
     showLoading: function(opt) {
       // eslint-disable-next-line
-      opt = $.extend(
-        true,
-        {
-          title: '加载中...',
-          duration: 3000
-        },
-        opt
-      )
+      opt = Object.assign({
+        title: '加载中...',
+        duration: 3000
+      }, opt)
 
       window.yl.call(
         'showLoading',
@@ -95,16 +88,16 @@ export default {
       this.isActive = 'woman'
       this.text = '女'
       this.gender = 2
-      // this.lists2 = []
-      // this.page = 1
+      this.lists = []
+      this.page = 1
       this.getParticipanList()
     },
     handleManClick() {
       this.isActive = 'man'
       this.text = '男'
       this.gender = 1
-      // this.lists1 = []
-      // this.page = 1
+      this.lists = []
+      this.page = 1
       this.getParticipanList()
     },
     handleBollot(participantId, index) {
@@ -142,14 +135,8 @@ export default {
         window.location.href = '#/Signup'
       }
     },
-    async getParticipanList(gender) {
-      // this.showLoading()
-      let gen = gender || this.gender
-      if (gen === 1) {
-        this.gender = 1
-      } else if (gen === 2) {
-        this.gender = 2
-      }
+    async getParticipanList() {
+      this.showLoading()
       let res = await this.$parent.request({
         url: `participant/getParticipantList?gender=${this.gender}&page=${
           this.page
@@ -157,23 +144,23 @@ export default {
         method: 'post'
         // data: params
       })
-      // this.hideLoading()
+      this.hideLoading()
       // console.log(res.data)
-      if (this.gender === 1 && res.code === '20000' && res.data) {
+      if (res.code === '20000' && res.data) {
         res.data.forEach(item => {
-          this.lists1.push(item)
-          this.lists = this.lists1
+          this.lists.push(item)
+          this.lists = this.lists
         })
       }
-      if (this.gender === 2 && res.code === '20000' && res.data) {
-        res.data.forEach(item => {
-          this.lists2.push(item)
-          this.lists = this.lists2
-        })
-      }
-      if (this.lists1.length === 0 && this.lists2.length === 0) {
-        this.type = false
-      }
+      // if (this.gender === 2 && res.code === '20000' && res.data) {
+      //   res.data.forEach(item => {
+      //     this.lists2.push(item)
+      //     this.lists = this.lists2
+      //   })
+      // }
+      // if (this.lists1.length === 0 && this.lists2.length === 0) {
+      //   this.type = false
+      // }
     },
     async getVote(participantId, index) {
       let res = await this.$parent.request({
@@ -193,12 +180,13 @@ export default {
           showCancelButton: false
         })
       } else if (this.code === '20000') {
+        this.lists[index].votes = res.data
         // this.newVote = res.data
-        if (this.gender === 1) {
-          this.lists1[index].votes = res.data
-        } else if (this.gender === 2) {
-          this.lists2[index].votes = res.data
-        }
+        // if (this.gender === 1) {
+        //   this.lists1[index].votes = res.data
+        // } else if (this.gender === 2) {
+        //   this.lists2[index].votes = res.data
+        // }
       }
     },
     async getAlipayUserId() {
@@ -234,8 +222,7 @@ export default {
         // console.log(false)
       }
     })
-    this.getParticipanList(2)
-    this.getParticipanList(1)
+    this.getParticipanList()
   },
   components: {
     Preheat: Preheat
