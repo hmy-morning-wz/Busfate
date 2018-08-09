@@ -144,8 +144,13 @@ export default {
     async getParticipanList(gender) {
       // this.showLoading()
       let gen = gender || this.gender
+      if (gen === 1) {
+        this.gender = 1
+      } else if (gen === 2) {
+        this.gender = 2
+      }
       let res = await this.$parent.request({
-        url: `participant/getParticipantList?gender=${gen}&page=${
+        url: `participant/getParticipantList?gender=${this.gender}&page=${
           this.page
         }&pageSize=${this.pageSize}`,
         method: 'post'
@@ -153,12 +158,12 @@ export default {
       })
       // this.hideLoading()
       // console.log(res.data)
-      if (gender === 1 && res.code === '20000' && res.data) {
+      if (this.gender === 1 && res.code === '20000' && res.data) {
         res.data.forEach(item => {
           this.lists1.push(item)
         })
       }
-      if (gender === 2 && res.code === '20000' && res.data) {
+      if (this.gender === 2 && res.code === '20000' && res.data) {
         res.data.forEach(item => {
           this.lists2.push(item)
         })
@@ -226,7 +231,7 @@ export default {
         // console.log(false)
       }
     })
-    this.getParticipanList()
+    this.getParticipanList(2)
     this.getParticipanList(1)
   },
   components: {
