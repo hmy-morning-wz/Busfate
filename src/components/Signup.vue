@@ -43,27 +43,27 @@ export default {
     return {
       imgs: [],
       files: [],
-      isActive: 'woman',
+      isActive: "woman",
       isOk: false,
-      nicknameValue: '',
-      buslineValue: '',
-      phoneValue: '',
+      nicknameValue: "",
+      buslineValue: "",
+      phoneValue: "",
       showDialog: false,
       // dialogOption: object,
-      tiptitle: '您有信息未填写正确哦~',
-      tipContent: '报名成功，我们会尽快审核哦',
-      photoLink: '',
+      tiptitle: "您有信息未填写正确哦~",
+      tipContent: "报名成功，我们会尽快审核哦",
+      photoLink: "",
       gender: 1
     };
   },
   methods: {
     handleWomanClick() {
-      this.isActive = 'woman';
-      this.gender = 1
+      this.isActive = "woman";
+      this.gender = 1;
     },
     handleManClick() {
-      this.isActive = 'man';
-      this.gender = 2
+      this.isActive = "man";
+      this.gender = 2;
     },
     readFile: function(event) {
       var reader = new FileReader();
@@ -87,30 +87,34 @@ export default {
           that.isOk = false;
         }
         var formData = new FormData();
-        formData.append('file', that.files[0]);
+        formData.append("file", that.files[0]);
         // var tmp = formData.getAll('file');
         // axios.post('http://10.0.3.116:9234/busLove/uploadFile/uploadOne', formData)
-        that.$parent.request({
-          baseURL: 'http://sit-operation.allcitygo.com:80/buslove/uploadFile/uploadOne',
-          headers:{'Content-type':'multipart/form-data'},
-          method: 'POST',
-          data:formData
-        })
-        .then(res => {
-          if (res.code ==='20000') {
-            that.photoLink = res.data
-            console.log(that.photoLink)
-          }
-        }).catch(e => {
-          console.log(e)
-        })
+        that.$parent
+          .request({
+            baseURL: "http://10.0.3.116:9234/buslove/uploadFile/uploadOne",
+            headers: { "Content-type": "multipart/form-data" },
+            method: "POST",
+            data: formData
+          })
+          .then(res => {
+            if (res.code === "20000") {
+              that.photoLink = res.data;
+              console.log(that.photoLink);
+            }
+          })
+          .catch(e => {
+            console.log(e);
+          });
       };
     },
     del: function(e) {
       e.target.parentNode.parentNode.removeChild(e.target.parentNode);
       console.log(this.imgs);
       this.imgs.splice(0, 1);
+      this.files.splice(0, 1);
       console.log(this.imgs);
+      this.photoLink = "";
       if (
         this.nicknameValue !== "" &&
         this.phoneValue !== "" &&
@@ -134,21 +138,21 @@ export default {
         this.isOk = false;
       }
     },
-    async uploadMes () {
+    async uploadMes() {
       let res = await this.$parent.request({
         // url: `http://sit-operation.allcitygo.com:9109/prefer/icons`,
-        url: `http://sit-operation.allcitygo.com:80/buslove/participant/apply`,
-        method: 'post',
+        url: `http://10.0.3.116:9234/buslove/participant/apply`,
+        method: "post",
         data: {
-          'gender': this.gender,
-          'lineNo': this.buslineValue,
-          'nickname': this.nicknameValue,
-          'photo': this.photoLink,
-          'telephone': this.phoneValue,
-          'userId': window.localStorage.userId
+          gender: this.gender,
+          lineNo: this.buslineValue,
+          nickname: this.nicknameValue,
+          photo: this.photoLink,
+          telephone: this.phoneValue,
+          userId: window.localStorage.userId
         }
-      })
-      if (res.code === '20000'){
+      });
+      if (res.code === "20000") {
         this.$refs.dialog.isError = true;
         this.showDialog = true;
         this.$refs.dialog.modal.title = "";
@@ -163,11 +167,11 @@ export default {
             this.showDialog = false;
             // next();
           });
-      } else if(res.code === '40004') {
+      } else if (res.code === "40004") {
         this.$refs.dialog.isError = false;
         this.showDialog = true;
         this.$refs.dialog.modal.title = "";
-        this.$refs.dialog.modal.text = '该用户已报名';
+        this.$refs.dialog.modal.text = "该用户已报名";
         this.$refs.dialog
           .confirm()
           .then(() => {
@@ -182,7 +186,7 @@ export default {
         this.$refs.dialog.isError = false;
         this.showDialog = true;
         this.$refs.dialog.modal.title = "";
-        this.$refs.dialog.modal.text = '网络繁忙';
+        this.$refs.dialog.modal.text = "网络繁忙";
         this.$refs.dialog
           .confirm()
           .then(() => {
@@ -202,7 +206,7 @@ export default {
         !phoneReg.test(this.phoneValue) ||
         !nameReg.test(this.nicknameValue)
       ) {
-        this.$refs.dialog.isError = true;
+        this.$refs.dialog.isError = false;
         this.showDialog = true;
         // this.tiptitle = "您有信息未填写正确哦~";
         this.$refs.dialog.modal.text = "";
@@ -218,12 +222,30 @@ export default {
             // next();
           });
       } else {
-        console.log(this.gender)
-        this.uploadMes()
+        if (this.isOk) {
+          console.log(this.gender);
+          this.uploadMes();
+        } else {
+          this.$refs.dialog.isError = false;
+          this.showDialog = true;
+          // this.tiptitle = "您有信息未填写正确哦~";
+          this.$refs.dialog.modal.text = "";
+          this.$refs.dialog.modal.title = this.tiptitle;
+          this.$refs.dialog
+            .confirm()
+            .then(() => {
+              this.showDialog = false;
+              // next();
+            })
+            .catch(() => {
+              this.showDialog = false;
+              // next();
+            });
+        }
       }
     }
   },
-  created(){
+  created() {
     // console.log(this.$axios)
   }
 };
@@ -398,16 +420,17 @@ body {
   height: 100%;
 }
 .signup {
-  /* padding-bottom: 1rem; */
   padding-top: 0.1rem;
-  width: 10rem;
+  width: -webkit-fill-available;
   height: -webkit-fill-available;
+  min-height: 10.6667rem;
+  max-height: 18rem;
   background: url("../assets/images/BG@2x.png") no-repeat;
   background-size: cover;
 }
 .contain_ban {
   margin: 0 auto;
-  width: 10rem;
+  width: -webkit-fill-available;
   max-height: 15rem;
   padding: 1rem;
   padding-top: 1.5rem;
@@ -419,7 +442,16 @@ body {
   border-radius: 35px;
 }
 
-.message-ban {
+@media (device-height: 812px) and (-webkit-min-device-pixel-ratio: 2) {
+  .signup {
+    padding-top: 1.5rem;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    min-height: 10.6667rem;
+    max-height: 22rem;
+    background: url("../assets/images/BG@2x.png") no-repeat;
+    background-size: cover;
+  }
 }
 
 .message-ban input {
