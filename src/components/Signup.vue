@@ -9,11 +9,11 @@
         </div>
         <input type="text" class="busline" placeholder="最常乘坐的公交线路（如189）" v-model='buslineValue' @input="changeDisable()" style="width:80%">
         <span style="font-family: PingFangSC-Regular;font-size: 0.4rem;color: #333333;">路</span>
-        <input type="text" class="phoneNo" placeholder="手机号码（为您保密，仅用于获奖联系哦）" v-model='phoneValue' @input="changeDisable()" />
+        <input type="text" class="phoneNo" placeholder="手机号码（为您保密，仅用于获奖联系哦）" maxlength="11" v-model='phoneValue' @input="changeDisable()" />
       </div>
       <div class="imgUploading">
         <div class="txt">
-          <span>我的靓（只需上传一张）</span>
+          <span>我的靓照（只需上传一张）</span>
         </div>
         <div id="moveinput" style="position: absolute;margin-top: 0">
           <div class="inputcontrol">
@@ -37,10 +37,10 @@
 </template>
 
 <script>
-import ConfirmBan from './ConfirmBan.vue'
+import ConfirmBan from "./ConfirmBan.vue";
 // import axios from 'axios'
 export default {
-  name: 'Signup',
+  name: "Signup",
   components: {
     ConfirmBan
   },
@@ -58,59 +58,107 @@ export default {
       tiptitle: "您有信息未填写正确哦~",
       tipContent: "报名成功，我们会尽快审核哦",
       photoLink: "",
-      gender: 1
-    }
+      gender: 2,
+      isUpload: false
+    };
   },
   methods: {
     handleWomanClick() {
-      this.isActive = 'woman'
-      this.gender = 1
+      this.isActive = "woman";
+      this.gender = 2;
     },
     handleManClick() {
-      this.isActive = 'man'
-      this.gender = 2
+      this.isActive = "man";
+      this.gender = 1;
     },
     readFile: function(event) {
-      var reader = new FileReader()
+      var reader = new FileReader();
       // console.log(event.target.files[0]);
-      this.files.push(event.target.files[0])
+      this.files.push(event.target.files[0]);
       // console.log(this.files[0])
-      reader.readAsDataURL(event.target.files[0])
-      var that = this
+      reader.readAsDataURL(event.target.files[0]);
+      var that = this;
       reader.onload = function() {
-        that.imgs.push(reader.result)
-        that.$refs.pathClear.value = ''
+        that.imgs.push(reader.result);
+        that.$refs.pathClear.value = "";
         // console.log(reader.result);
         if (
-          that.nicknameValue !== '' &&
-          that.phoneValue !== '' &&
-          that.buslineValue !== '' &&
+          that.nicknameValue !== "" &&
+          that.phoneValue !== "" &&
+          that.buslineValue !== "" &&
           that.imgs.length !== 0
         ) {
-          that.isOk = true
+          that.isOk = true;
         } else {
-          that.isOk = false
+          that.isOk = false;
         }
-        var formData = new FormData()
-        formData.append('file', that.files[0])
-        debugger
+        var formData = new FormData();
+        formData.append("file", that.files[0]);
         // var tmp = formData.getAll('file');
         // axios.post('http://10.0.3.116:9234/busLove/uploadFile/uploadOne', formData)
         that.$parent
           .request({
-            baseURL: 'https://sit-operation.allcitygo.com/buslove/uploadFile/uploadOne',
-            headers: { 'Content-type': 'multipart/form-data' },
-            method: 'POST',
+            baseURL:
+              "https://sit-operation.allcitygo.com/buslove/uploadFile/uploadOne",
+            headers: { "Content-type": "multipart/form-data" },
+            method: "POST",
             data: formData
           })
           .then(res => {
-            if (res.code === '20000') {
+            if (res.code === "20000") {
               that.photoLink = res.data;
               console.log(that.photoLink);
+              that.isUpload = true;
+              that.isOk = true;
+              that.$refs.dialog.isError = true;
+              that.showDialog = true;
+              that.$refs.dialog.modal.title = "";
+              that.$refs.dialog.modal.text = "图片上传成功";
+              that.$refs.dialog
+                .confirm()
+                .then(() => {
+                  that.showDialog = false;
+                  // next();
+                })
+                .catch(() => {
+                  that.showDialog = false;
+                  // next();
+                });
+            } else {
+              that.isOk = false;
+              that.$refs.dialog.isError = false;
+              that.showDialog = true;
+              that.$refs.dialog.modal.title = "";
+              that.$refs.dialog.modal.text = "图片上传失败";
+              that.$refs.dialog
+                .confirm()
+                .then(() => {
+                  that.showDialog = false;
+                  // next();
+                })
+                .catch(() => {
+                  that.showDialog = false;
+                  // next();
+                });
             }
           })
           .catch(e => {
             console.log(e);
+            that.isOk = false;
+            that.$refs.dialog.isError = false;
+            that.showDialog = true;
+            that.$refs.dialog.modal.title = "";
+            that.$refs.dialog.modal.text = "图片上传失败";
+            that.$refs.dialog
+              .confirm()
+              .then(() => {
+                that.showDialog = false;
+                // next();
+              })
+              .catch(() => {
+                that.showDialog = false;
+                // next();
+              });
           });
       };
     },
@@ -121,34 +169,35 @@ export default {
       this.files.splice(0, 1);
       console.log(this.imgs);
       this.photoLink = "";
+      this.isUpload = true;
       if (
-        this.nicknameValue !== '' &&
-        this.phoneValue !== '' &&
-        this.buslineValue !== '' &&
+        this.nicknameValue !== "" &&
+        this.phoneValue !== "" &&
+        this.buslineValue !== "" &&
         this.imgs.length !== 0
       ) {
-        this.isOk = true
+        this.isOk = true;
       } else {
-        this.isOk = false
+        this.isOk = false;
       }
     },
     changeDisable: function() {
       if (
-        this.nicknameValue !== '' &&
-        this.phoneValue !== '' &&
-        this.buslineValue !== '' &&
+        this.nicknameValue !== "" &&
+        this.phoneValue !== "" &&
+        this.buslineValue !== "" &&
         this.imgs.length !== 0
       ) {
-        this.isOk = true
+        this.isOk = true;
       } else {
-        this.isOk = false
+        this.isOk = false;
       }
     },
     async uploadMes() {
       let res = await this.$parent.request({
         // url: `http://sit-operation.allcitygo.com:9109/prefer/icons`,
-        url: 'participant/apply',
-        method: 'post',
+        url: "participant/apply",
+        method: "post",
         data: {
           gender: this.gender,
           lineNo: this.buslineValue,
@@ -157,57 +206,57 @@ export default {
           telephone: this.phoneValue,
           userId: window.localStorage.userId
         }
-      })
-      if (res.code === '20000') {
-        this.$refs.dialog.isError = true
-        this.showDialog = true
-        this.$refs.dialog.modal.title = ''
-        this.$refs.dialog.modal.text = this.tipContent
+      });
+      if (res.code === "20000") {
+        this.$refs.dialog.isError = true;
+        this.showDialog = true;
+        this.$refs.dialog.modal.title = "";
+        this.$refs.dialog.modal.text = this.tipContent;
         this.$refs.dialog
           .confirm()
           .then(() => {
-            this.showDialog = false
+            this.showDialog = false;
             // next();
           })
           .catch(() => {
-            this.showDialog = false
+            this.showDialog = false;
             // next();
-          })
-      } else if (res.code === '40004') {
-        this.$refs.dialog.isError = false
-        this.showDialog = true
-        this.$refs.dialog.modal.title = ''
-        this.$refs.dialog.modal.text = '该用户已报名'
+          });
+      } else if (res.code === "40004") {
+        this.$refs.dialog.isError = false;
+        this.showDialog = true;
+        this.$refs.dialog.modal.title = "";
+        this.$refs.dialog.modal.text = "该用户已报名";
         this.$refs.dialog
           .confirm()
           .then(() => {
-            this.showDialog = false
+            this.showDialog = false;
             // next();
           })
           .catch(() => {
-            this.showDialog = false
+            this.showDialog = false;
             // next();
-          })
+          });
       } else {
-        this.$refs.dialog.isError = false
-        this.showDialog = true
-        this.$refs.dialog.modal.title = ''
-        this.$refs.dialog.modal.text = '网络繁忙'
+        this.$refs.dialog.isError = false;
+        this.showDialog = true;
+        this.$refs.dialog.modal.title = "";
+        this.$refs.dialog.modal.text = "网络繁忙";
         this.$refs.dialog
           .confirm()
           .then(() => {
-            this.showDialog = false
+            this.showDialog = false;
             // next();
           })
           .catch(() => {
-            this.showDialog = false
+            this.showDialog = false;
             // next();
-          })
+          });
       }
     },
     sub_mes: function() {
-      var phoneReg = /1[3|4|5|7|8][0-9](\d|\*){4}\d{4}/
-      var nameReg = /^[0-9a-zA-Z\u4E00-\u9FA5]{1,20}$/
+      var phoneReg = /1[3|4|5|7|8][0-9](\d|\*){4}\d{4}/;
+      var nameReg = /^[0-9a-zA-Z\u4E00-\u9FA5]{1,20}$/;
       if (
         !phoneReg.test(this.phoneValue) ||
         !nameReg.test(this.nicknameValue)
@@ -215,20 +264,36 @@ export default {
         this.$refs.dialog.isError = false;
         this.showDialog = true;
         // this.tiptitle = "您有信息未填写正确哦~";
-        this.$refs.dialog.modal.text = ''
-        this.$refs.dialog.modal.title = this.tiptitle
+        this.$refs.dialog.modal.text = "";
+        this.$refs.dialog.modal.title = this.tiptitle;
         this.$refs.dialog
           .confirm()
           .then(() => {
-            this.showDialog = false
+            this.showDialog = false;
             // next();
           })
           .catch(() => {
-            this.showDialog = false
+            this.showDialog = false;
             // next();
-          })
+          });
       } else {
-        if (this.isOk) {
+        if (this.isUpload === false) {
+          this.$refs.dialog.isError = false;
+          this.showDialog = true;
+          // this.tiptitle = "您有信息未填写正确哦~";
+          this.$refs.dialog.modal.text = "";
+          this.$refs.dialog.modal.title = '图片上传失败';
+          this.$refs.dialog
+            .confirm()
+            .then(() => {
+              this.showDialog = false;
+              // next();
+            })
+            .catch(() => {
+              this.showDialog = false;
+              // next();
+            });
+        } else if (this.isOk) {
           console.log(this.gender);
           this.uploadMes();
         } else {
@@ -254,9 +319,9 @@ export default {
   created() {
     // console.log(this.$axios)
   }
-}
+};
 // eslint-disable-next-line
-mui.previewImage()
+mui.previewImage();
 </script>
 
 <style>
@@ -443,7 +508,7 @@ body {
   padding-bottom: 2rem;
   overflow: hidden;
   background-color: white;
-  background: url('../assets/images/BG2@2x.png') no-repeat;
+  background: url("../assets/images/BG2@2x.png") no-repeat;
   background-size: cover;
   border-radius: 35px;
 }
@@ -513,7 +578,7 @@ body {
   width: 3.7333rem;
   margin-top: 0.3rem;
   margin-right: 0.24rem;
-  background: url('../assets/images/addpic.png');
+  background: url("../assets/images/addpic.png");
   background-size: 100% 100%;
   position: relative;
   float: left;
