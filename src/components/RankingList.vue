@@ -1,6 +1,6 @@
 <template>
   <div class="warpper">
-    <Preheat :showRankHeader="type"></Preheat>
+    <Preheat :showRankHeader="showRankHeader"></Preheat>
     <div class="rank-list-warpper">
       <div class="ranking-list">
         <div class="rank-nav">
@@ -30,12 +30,11 @@
           </div>
         </div>
       </div>
-      <div class="lists-footer">亲，已经到底了哦~</div>
+      <div class="lists-footer" v-show="listsFooterShow">亲，已经到底了哦~</div>
       <div class="footer"></div>
-      <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
+      <button class="footer footer1" @click="handleSignUpClick()">我要报名</button>
     </div>
   </div>
-
 </template>
 
 <script type="text/ecmascript-6">
@@ -47,13 +46,13 @@ export default {
       text: '女',
       votes: 0,
       status: 0,
-      dis: false,
       gender: 2,
       page: 1,
       pageSize: 6,
       lists: [],
       code: 20000,
-      type: true
+      showRankHeader: true,
+      listsFooterShow: false
     }
   },
   created() {
@@ -167,8 +166,8 @@ export default {
           this.lists.push(item)
         })
       }
-      if (this.lists.length === 0) {
-        this.type = false
+      if (res.code === '20000' && !res.data) {
+        this.listsFooterShow = true
       }
     },
     async getVote(participantId, index) {
