@@ -1,6 +1,6 @@
 <template>
   <div class="warpper">
-    <Preheat :showRankHeader="showRankHeader"></Preheat>
+    <Preheat :showRankHeader="type"></Preheat>
     <div class="rank-list-warpper">
       <div class="ranking-list">
         <div class="rank-nav">
@@ -29,9 +29,9 @@
             </div>
           </div>
         </div>
-        <div class="footer"></div>
-        <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
-      </div>
+      </div> -->
+      <div class="footer"></div>
+      <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
     </div>
   </div>
 
@@ -44,7 +44,6 @@ export default {
     return {
       isActive: 'woman',
       text: '女',
-      showRankHeader: true,
       votes: 0,
       status: 0,
       dis: false,
@@ -52,7 +51,8 @@ export default {
       page: 1,
       pageSize: 6,
       lists: [],
-      code: 20000
+      code: 20000,
+      type: true
     }
   },
   created() {
@@ -113,6 +113,15 @@ export default {
     handleSignUpClick() {
       // 获取用户报名状态
       this.getUserStatus()
+    },
+    async getUserStatus() {
+      let res = await this.$parent.request({
+        url: `participant/getUserStatus?userId=${window.localStorage.userId}`,
+        method: 'post'
+        // data: params
+      })
+      // console.log(res.data)
+      this.status = res.data.status
       if (this.status === 1) {
         this.$messagebox.alert('', {
           title: '温馨提示',
@@ -141,15 +150,6 @@ export default {
         window.location.href = '#/Signup'
       }
     },
-    async getUserStatus() {
-      let res = await this.$parent.request({
-        url: `participant/getUserStatus?userId=${window.localStorage.userId}`,
-        method: 'post'
-        // data: params
-      })
-      // console.log(res.data)
-      this.status = res.data.status
-    },
     async getParticipanList() {
       // this.showLoading()
       let res = await this.$parent.request({
@@ -165,6 +165,9 @@ export default {
         res.data.forEach(item => {
           this.lists.push(item)
         })
+      }
+      if (this.lists.length === 0) {
+        this.type = false
       }
     },
     async getVote(participantId, index) {
@@ -405,7 +408,7 @@ export default {
 }
 .footer1 {
   width: 100%;
-  height: 50px;
+  height: 53px;
   line-height: 50px;
   position: fixed;
   bottom: 0;

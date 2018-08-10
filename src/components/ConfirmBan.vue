@@ -38,22 +38,21 @@ export default {
       }
     }
   },
-  computed: {
-    // eslint-disable-next-line
-    modal: function() {
-      let options = this.dialogOption
-      return {
-        title: options.title || '',
-        text: options.text,
-        cancelButtonText: options.cancelButtonText
-          ? options.cancelButtonText
-          : '取消',
-        confirmButtonText: options.confirmButtonText
-          ? options.confirmButtonText
-          : '确定'
-      }
-    }
-  },
+  // computed: {
+  //   modal: function() {
+  //     let options = this.dialogOption;
+  //     return {
+  //       title: options.title || "",
+  //       text: options.text,
+  //       cancelButtonText: options.cancelButtonText
+  //         ? options.cancelButtonText
+  //         : "取消",
+  //       confirmButtonText: options.confirmButtonText
+  //         ? options.confirmButtonText
+  //         : "确定"
+  //     };
+  //   }
+  // },
   methods: {
     // 确定,将promise断定为完成态
     submit() {
