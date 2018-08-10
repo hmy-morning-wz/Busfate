@@ -102,7 +102,8 @@ export default {
               'https://operation.allcitygo.com/buslove/uploadFile/uploadOne',
             headers: { 'Content-type': 'multipart/form-data' },
             method: 'POST',
-            data: formData
+            data: formData,
+            timeout: 60000
           })
           .then(res => {
             if (res.code === '20000') {
