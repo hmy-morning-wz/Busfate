@@ -90,6 +90,7 @@ export default {
       )
     },
     handleWomanClick() {
+      this.listsFooterShow = false
       this.isActive = 'woman'
       this.text = '女'
       this.gender = 2
@@ -99,6 +100,7 @@ export default {
       this.getParticipanList()
     },
     handleManClick() {
+      this.listsFooterShow = false
       this.isActive = 'man'
       this.text = '男'
       this.gender = 1
