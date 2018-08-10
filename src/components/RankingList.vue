@@ -30,6 +30,7 @@
           </div>
         </div>
       </div>
+      <div class="lists-footer">亲，已经到底了哦~</div>
       <div class="footer"></div>
       <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
     </div>
@@ -401,6 +402,15 @@ export default {
       }
     }
   }
+}
+.lists-footer {
+  width: 100%;
+  height: 30px;
+  text-align: center;
+  font-family: PingFangSC-Regular;
+  font-size: 11px;
+  color: #999999;
+  text-align: center;
 }
 .footer {
   width: 100%;
