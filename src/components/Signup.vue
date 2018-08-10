@@ -82,16 +82,16 @@ export default {
         that.imgs.push(reader.result)
         that.$refs.pathClear.value = ''
         // console.log(reader.result);
-        if (
-          that.nicknameValue !== '' &&
-          that.phoneValue !== '' &&
-          that.buslineValue !== '' &&
-          that.imgs.length !== 0
-        ) {
-          that.isOk = true
-        } else {
-          that.isOk = false
-        }
+        // if (
+        //   that.nicknameValue !== '' &&
+        //   that.phoneValue !== '' &&
+        //   that.buslineValue !== '' &&
+        //   that.imgs.length !== 0
+        // ) {
+        //   that.isOk = true
+        // } else {
+        //   that.isOk = false
+        // }
         var formData = new FormData()
         formData.append('file', that.files[0])
         // var tmp = formData.getAll('file');
@@ -109,7 +109,14 @@ export default {
               that.photoLink = res.data
               console.log(that.photoLink)
               that.isUpload = true
-              that.isOk = true
+              if (
+                that.nicknameValue !== '' &&
+                that.phoneValue !== '' &&
+                that.buslineValue !== '' &&
+                that.imgs.length !== 0
+              ) {
+                that.isOk = true
+              }
               that.$refs.dialog.isError = true
               that.showDialog = true
               that.$refs.dialog.modal.title = ''
@@ -280,6 +287,7 @@ export default {
           })
       } else {
         if (this.isUpload === false) {
+          this.isOk = false
           this.$refs.dialog.isError = false
           this.showDialog = true
           // this.tiptitle = "您有信息未填写正确哦~";
