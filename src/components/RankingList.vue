@@ -29,7 +29,7 @@
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
       <div class="footer"></div>
       <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
     </div>
