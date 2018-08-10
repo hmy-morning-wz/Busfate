@@ -161,13 +161,14 @@ export default {
       })
       this.hideLoading()
       // console.log(res.data)
-      if (res.code === '20000' && res.data) {
-        res.data.forEach(item => {
-          this.lists.push(item)
-        })
-      }
-      if (res.code === '20000' && !res.data) {
-        this.listsFooterShow = true
+      if (res.code === '20000') {
+        if (res.data) {
+          res.data.forEach(item => {
+            this.lists.push(item)
+          })
+        } else {
+          this.listsFooterShow = true
+        }
       }
     },
     async getVote(participantId, index) {
