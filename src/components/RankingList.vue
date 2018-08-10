@@ -1,6 +1,6 @@
 <template>
   <div class="warpper">
-    <Preheat :showRankHeader="showRankHeader"></Preheat>
+    <Preheat :showRankHeader="true"></Preheat>
     <div class="rank-list-warpper">
       <div class="ranking-list">
         <div class="rank-nav">
@@ -51,7 +51,6 @@ export default {
       pageSize: 6,
       lists: [],
       code: 20000,
-      showRankHeader: true,
       listsFooterShow: false
     }
   },
