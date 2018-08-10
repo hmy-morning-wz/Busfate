@@ -17,7 +17,7 @@
         </div>
         <div id="moveinput" style="position: absolute;margin-top: 0">
           <div class="inputcontrol">
-            <input @change="readFile($event)" type="file" id="input1" ref="pathClear" accept="image*" capture="camera" class="inputstyle" @input="changeDisable()">
+            <input @change="readFile($event)" type="file" id="input1" ref="pathClear" accept="image*" class="inputstyle" @input="changeDisable()">
           </div>
         </div>
         <div class="picture" v-if="imgs.length>0" v-for='(item ,index ) in imgs' :key="index">
@@ -169,7 +169,7 @@ export default {
       this.files.splice(0, 1)
       console.log(this.imgs)
       this.photoLink = ''
-      this.isUpload = true
+      this.isUpload = false
       if (
         this.nicknameValue !== '' &&
         this.phoneValue !== '' &&
