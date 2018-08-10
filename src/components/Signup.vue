@@ -32,7 +32,7 @@
         <button class="sub-btn" :class="{ okBtn: isOk===true }" @click="sub_mes()">提交</button>
       </div>
     </div>
-    <ConfirmBan v-show="showDialog" :dialog-option="dialogOption" ref="dialog"></ConfirmBan>
+    <ConfirmBan v-show="showDialog"  ref="dialog"></ConfirmBan>
   </div>
 </template>
 
@@ -54,7 +54,7 @@ export default {
       buslineValue: '',
       phoneValue: '',
       showDialog: false,
-      dialogOption: '',
+      // dialogOption: object,
       tiptitle: '您有信息未填写正确哦~',
       tipContent: '报名成功，我们会尽快审核哦',
       photoLink: '',
@@ -405,16 +405,15 @@ body {
   height: 100%;
 }
 .signup {
-  /* padding-bottom: 1rem; */
   padding-top: 0.1rem;
-  width: 10rem;
+  width: -webkit-fill-available;
   height: -webkit-fill-available;
   background: url('../assets/images/BG@2x.png') no-repeat;
   background-size: cover;
 }
 .contain_ban {
   margin: 0 auto;
-  width: 10rem;
+  width: -webkit-fill-available;
   max-height: 15rem;
   padding: 1rem;
   padding-top: 1.5rem;
@@ -426,7 +425,16 @@ body {
   border-radius: 35px;
 }
 
-.message-ban {
+@media (device-height: 812px) and (-webkit-min-device-pixel-ratio: 2) {
+  .signup {
+    padding-top: 1.5rem;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    min-height: 10.6667rem;
+    max-height: 22rem;
+    background: url('../assets/images/BG@2x.png') no-repeat;
+    background-size: cover;
+  }
 }
 
 .message-ban input {

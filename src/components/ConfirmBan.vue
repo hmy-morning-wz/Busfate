@@ -16,7 +16,12 @@
 export default {
   name: 'dialog',
   props: {
-    dialogOption: Object,
+    // dialogOption: {
+    //     title: "",
+    //     text: "",
+    //     cancelButtonText: "",
+    //     confirmButtonText: "OK~"
+    //   },
     showDialog: false
   },
   data() {
