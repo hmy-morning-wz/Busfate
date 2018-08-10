@@ -99,7 +99,7 @@ export default {
         that.$parent
           .request({
             baseURL:
-              'https://sit-operation.allcitygo.com/buslove/uploadFile/uploadOne',
+              'https://operation.allcitygo.com/buslove/uploadFile/uploadOne',
             headers: { 'Content-type': 'multipart/form-data' },
             method: 'POST',
             data: formData
