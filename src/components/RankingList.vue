@@ -406,6 +406,7 @@ export default {
 .lists-footer {
   width: 100%;
   height: 30px;
+  line-height: 30px;
   text-align: center;
   font-family: PingFangSC-Regular;
   font-size: 11px;
