@@ -398,7 +398,7 @@ export default {
 }
 .footer1 {
   width: 100%;
-  height: 50px;
+  height: 53px;
   line-height: 50px;
   position: fixed;
   bottom: 0;
