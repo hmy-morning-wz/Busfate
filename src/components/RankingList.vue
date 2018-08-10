@@ -50,7 +50,7 @@ export default {
       dis: false,
       gender: 2,
       page: 1,
-      pageSize: 9,
+      pageSize: 6,
       lists: [],
       code: 20000
     }
@@ -93,6 +93,7 @@ export default {
       this.isActive = 'woman'
       this.text = '女'
       this.gender = 2
+      this.showLoading()
       this.lists = []
       this.page = 1
       this.getParticipanList()
@@ -101,6 +102,7 @@ export default {
       this.isActive = 'man'
       this.text = '男'
       this.gender = 1
+      this.showLoading()
       this.lists = []
       this.page = 1
       this.getParticipanList()
@@ -127,7 +129,15 @@ export default {
         })
         return
       }
-      if (this.status === 0 || 3) {
+      if (this.status === 0) {
+        window.location.href = '#/Signup'
+      }
+      if (this.status === 3) {
+        this.$messagebox.alert('', {
+          title: '温馨提示',
+          message: '您的审核没通过哦，请重新报名',
+          showCancelButton: false
+        })
         window.location.href = '#/Signup'
       }
     },
@@ -149,7 +159,7 @@ export default {
         method: 'post'
         // data: params
       })
-      // this.hideLoading()
+      this.hideLoading()
       // console.log(res.data)
       if (res.code === '20000' && res.data) {
         res.data.forEach(item => {
