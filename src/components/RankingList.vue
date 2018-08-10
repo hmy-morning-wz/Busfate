@@ -2,7 +2,7 @@
   <div class="warpper">
     <Preheat :showRankHeader="type"></Preheat>
     <div class="rank-list-warpper">
-      <div class="ranking-list" v-show="type">
+      <!-- <div class="ranking-list" v-show="type">
         <div class="rank-nav">
           <div class="woman-rank" @click="handleWomanClick()" :class="{ active1: isActive==='woman' }">女神榜</div>
           <div class="man-rank" @click="handleManClick()" :class="{ active1: isActive==='man' }">男神榜</div>
@@ -29,7 +29,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="footer"></div>
       <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
     </div>

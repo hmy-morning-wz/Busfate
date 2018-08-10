@@ -2,7 +2,7 @@
   <div class="signup">
     <div class="contain_ban">
       <div class="message-ban">
-        <input type="text" class="nickname" placeholder="昵称（支持英文大小写和中文）" v-model='nicknameValue' @input="changeDisable()" />
+        <input type="text" class="nickname" placeholder="昵称(支持英文大小写和中文，最多七位)" maxlength="7" v-model='nicknameValue' @input="changeDisable()" />
         <div class="check-sex">
           <div class="woman-option" @click="handleWomanClick()" :class="{ active: isActive==='woman' }">我是女神</div>
           <div class="man-option" @click="handleManClick()" :class="{ active: isActive==='man' }">我是男神</div>

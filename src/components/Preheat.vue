@@ -67,7 +67,7 @@
         </div>
       </div>
     </div>
-    <img v-show="showRankHeader" class="rank-header" src="../assets/images/title_paihangbang@2x.png" alt="">
+    <!-- <img v-show="showRankHeader" class="rank-header" src="../assets/images/title_paihangbang@2x.png" alt=""> -->
   </div>
 </template>
 
