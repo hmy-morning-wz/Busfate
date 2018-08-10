@@ -7,4 +7,4 @@ SIT life_circle deploy:
   script:
     - /data/deploy/autocode/activity_h5.sh
   only:
-    - stable
+    - dev_chj
