@@ -156,6 +156,8 @@ export default {
       reader.readAsDataURL(event.target.files[0])
       var that = this
       reader.onload = function() {
+        that.imgs.push(reader.result)
+        that.$refs.pathClear.value = ''
         var img = new Image()
         let newImage
         img.src = this.result
@@ -191,7 +193,7 @@ export default {
             that.$parent
               .request({
                 // baseURL:`http://10.0.2.115:9234/busLove/uploadFile/fileUploadBase64`,
-                baseURL: 'https://sit-operation.allcitygo.com/buslove/uploadFile/fileUploadBase64',
+                url: '/uploadFile/fileUploadBase64',
                 headers: { 'Content-type': 'application/x-www-form-urlencoded' },
                 method: 'POST',
                 data: formData,
