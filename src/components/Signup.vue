@@ -149,84 +149,96 @@ export default {
       return ndata
     },
     readFile: async function(event) {
-      var reader = new FileReader()
+      let that = this
+      let reader = new FileReader()
       // console.log(event.target.files[0]);
       this.files.push(event.target.files[0])
-      // console.log(this.files[0])
-      reader.readAsDataURL(event.target.files[0])
-      var that = this
-      reader.onload = function() {
-        that.imgs.push(reader.result)
-        that.$refs.pathClear.value = ''
-        var img = new Image()
-        let newImage
-        img.src = this.result
-        img.onload = function() {
-          //图片旋转角度:需要考虑苹果等手机拍摄方向
-          newImage = that.rotateImage(img)
+      console.log(this.files[0].size)
+      if (this.files[0].size > 500) {
+        reader.readAsDataURL(event.target.files[0])
+        reader.onload = function() {
+          that.imgs.push(reader.result)
+          that.$refs.pathClear.value = ''
+          var img = new Image()
+          let newImage
+          img.src = this.result
+          img.onload = function() {
+            // 图片旋转角度:需要考虑苹果等手机拍摄方向
+            newImage = that.rotateImage(img)
 
-          if (newImage.complete) {
-            cb()
-          } else {
-            newImage.onload = cb
-          }
+            if (newImage.complete) {
+              cb()
+            } else {
+              newImage.onload = cb
+            }
 
-          async function cb() {
-            // console.log(newImage)
-            var data = await that.compress(newImage) //图片压缩
-            console.log(data)
-            that.sleep()
-            // let text = window.atob(data.split(',')[1])
-            // let buffer = new Uint8Array(text.length)
-            // let pecent = 0,
-            //   loop = null
-            // for (let i = 0; i < text.length; i++) {
-            //   buffer[i] = text.charCodeAt(i)
-            // }
-            // let blob = that.getBlob([buffer], that.files.type)
-            // console.log(newImage.getAttribute('src'))
-            let formData = new FormData()
-            formData.append('h5base64', data)
-            formData.append('originalFileName', `${Date.now()}.jpeg`)
-            // formData.append('h5base64', newImage.getAttribute('src'))
-            that.base64 = newImage.getAttribute('src')
-            that.$parent
-              .request({
-                // baseURL:`http://10.0.2.115:9234/busLove/uploadFile/fileUploadBase64`,
-                url: '/uploadFile/fileUploadBase64',
-                headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-                method: 'POST',
-                data: formData,
-                timeout: 60000
-              })
-              .then(res => {
-                if (res.code === '20000') {
-                  that.photoLink = res.data
-                  console.log(that.photoLink)
-                  that.isUpload = true
-                  if (
-                    that.nicknameValue !== '' &&
-                    that.phoneValue !== '' &&
-                    that.buslineValue !== '' &&
-                    that.imgs.length !== 0
-                  ) {
-                    that.isOk = true
+            async function cb() {
+              // console.log(newImage)
+              var data = await that.compress(newImage) //图片压缩
+              console.log(data)
+              that.sleep()
+              let formData = new FormData()
+              formData.append('h5base64', data)
+              formData.append('originalFileName', `${Date.now()}.jpeg`)
+              that.base64 = newImage.getAttribute('src')
+              that.$parent
+                .request({
+                  // baseURL:`http://10.0.2.115:9234/busLove/uploadFile/fileUploadBase64`,
+                  url: '/uploadFile/fileUploadBase64',
+                  headers: {
+                    'Content-type': 'application/x-www-form-urlencoded'
+                  },
+                  method: 'POST',
+                  data: formData,
+                  timeout: 60000
+                })
+                .then(res => {
+                  if (res.code === '20000') {
+                    that.photoLink = res.data
+                    console.log(that.photoLink)
+                    that.isUpload = true
+                    if (
+                      that.nicknameValue !== '' &&
+                      that.phoneValue !== '' &&
+                      that.buslineValue !== '' &&
+                      that.imgs.length !== 0
+                    ) {
+                      that.isOk = true
+                    }
+                    that.$refs.dialog.isError = true
+                    that.showDialog = true
+                    that.$refs.dialog.modal.title = ''
+                    that.$refs.dialog.modal.text = '图片上传成功'
+                    that.$refs.dialog
+                      .confirm()
+                      .then(() => {
+                        that.showDialog = false
+                        // next();
+                      })
+                      .catch(() => {
+                        that.showDialog = false
+                        // next();
+                      })
+                  } else {
+                    that.isOk = false
+                    that.$refs.dialog.isError = false
+                    that.showDialog = true
+                    that.$refs.dialog.modal.title = ''
+                    that.$refs.dialog.modal.text = '图片上传失败'
+                    that.$refs.dialog
+                      .confirm()
+                      .then(() => {
+                        that.showDialog = false
+                        // next();
+                      })
+                      .catch(() => {
+                        that.showDialog = false
+                        // next();
+                      })
                   }
-                  that.$refs.dialog.isError = true
-                  that.showDialog = true
-                  that.$refs.dialog.modal.title = ''
-                  that.$refs.dialog.modal.text = '图片上传成功'
-                  that.$refs.dialog
-                    .confirm()
-                    .then(() => {
-                      that.showDialog = false
-                      // next();
-                    })
-                    .catch(() => {
-                      that.showDialog = false
-                      // next();
-                    })
-                } else {
+                })
+                .catch(e => {
+                  console.log(e)
                   that.isOk = false
                   that.$refs.dialog.isError = false
                   that.showDialog = true
@@ -242,49 +254,23 @@ export default {
                       that.showDialog = false
                       // next();
                     })
-                }
-              })
-              .catch(e => {
-                console.log(e)
-                that.isOk = false
-                that.$refs.dialog.isError = false
-                that.showDialog = true
-                that.$refs.dialog.modal.title = ''
-                that.$refs.dialog.modal.text = '图片上传失败'
-                that.$refs.dialog
-                  .confirm()
-                  .then(() => {
-                    that.showDialog = false
-                    // next();
-                  })
-                  .catch(() => {
-                    that.showDialog = false
-                    // next();
-                  })
-              })
+                })
+            }
           }
-          // if (newImage.complete) {
-
-          // var formData = new FormData()
-          // formData.append('file', newImage) // that.files[0]
-          // var tmp = formData.getAll('file');
-          // axios.post('http://10.0.3.116:9234/busLove/uploadFile/uploadOne', formData)
         }
-        // }
-
-        // that.imgs.push(reader.result)
-        // that.$refs.pathClear.value = ''
-        // console.log(reader.result);
-        // if (
-        //   that.nicknameValue !== '' &&
-        //   that.phoneValue !== '' &&
-        //   that.buslineValue !== '' &&
-        //   that.imgs.length !== 0
-        // ) {
-        //   that.isOk = true
-        // } else {
-        //   that.isOk = false
-        // }
+      } else {
+        this.files.splice(0, 1)
+        that.showDialog = true
+        that.$refs.dialog.modal.title = ''
+        that.$refs.dialog.modal.text = '图片太小了哦，换张美照试一下哈'
+        that.$refs.dialog
+          .confirm()
+          .then(() => {
+            that.showDialog = false
+          })
+          .catch(() => {
+            that.showDialog = false
+          })
       }
     },
     rotateImage: function(image) {
@@ -514,8 +500,8 @@ export default {
   created() {
     this.canvas = document.createElement('canvas')
     this.ctx = this.canvas.getContext('2d')
-    this.tCanvas = document.createElement("canvas")
-	  this.tctx = this.tCanvas.getContext("2d")
+    this.tCanvas = document.createElement('canvas')
+    this.tctx = this.tCanvas.getContext('2d')
     // console.log(this.$axios)
   }
 }
