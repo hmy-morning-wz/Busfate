@@ -59,6 +59,32 @@ export default {
   created() {
     // 获取用户id
     this.getAlipayUserId()
+    window.yl.call(
+      'setTitleBarRightButton',
+      {
+        rightButtonShow: true,
+        rightButtonTextOpen: true,
+        rightButtonText: '' // 优先展示图标、其次是文字，两者选一个
+      },
+      {
+        onSuccess: function(a) {
+          // alert('success')
+          // eslint-disable-next-line
+          AlipayJSBridge.call(
+            'startShare',
+            {
+              bizType: '' // 业务标识，为空时将会显示默认的分享渠道列表。
+            },
+            function(data) {
+              console.log(data)
+            }
+          )
+        },
+        onFail: function(a) {
+          // alert('fail')
+        }
+      }
+    )
   },
   methods: {
     // 隐藏菊花
