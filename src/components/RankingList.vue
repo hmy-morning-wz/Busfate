@@ -230,7 +230,7 @@ export default {
           activityId: 1,
           iconId: this.iconId,
           operationType: this.operationType,
-          pageId: this.page,
+          pageId: 1,
           userId: localStorage.userId
         }
       })
@@ -260,9 +260,7 @@ export default {
         // console.log(that.page)
         // that.showLoading()
         that.page += 1
-        that.saveActivityDataTrack()
         that.getParticipanList()
-
         // alert(that.page)
       } else {
         // console.log(false)
