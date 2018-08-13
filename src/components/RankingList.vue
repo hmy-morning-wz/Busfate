@@ -51,7 +51,9 @@ export default {
       pageSize: 6,
       lists: [],
       code: 20000,
-      listsFooterShow: false
+      listsFooterShow: false,
+      iconId: 0,
+      operationType: 1
     }
   },
   created() {
@@ -97,6 +99,9 @@ export default {
       this.lists = []
       this.page = 1
       this.getParticipanList()
+      this.iconId = 1
+      this.operationType = 2
+      this.saveActivityDataTrack()
     },
     handleManClick() {
       this.listsFooterShow = false
@@ -107,17 +112,28 @@ export default {
       this.lists = []
       this.page = 1
       this.getParticipanList()
+      this.iconId = 2
+      this.operationType = 2
+      this.saveActivityDataTrack()
     },
     handleBollot(participantId, index) {
       this.getVote(participantId, index)
+      this.iconId = 3
+      this.operationType = 2
+      this.saveActivityDataTrack()
     },
     handleSignUpClick() {
       // 获取用户报名状态
       this.getUserStatus()
+      this.iconId = 4
+      this.operationType = 2
+      this.saveActivityDataTrack()
     },
     async getUserStatus() {
       let res = await this.$parent.request({
-        url: `participant/getUserStatus?userId=${window.localStorage.userId}`,
+        url: `/buslove/participant/getUserStatus?userId=${
+          window.localStorage.userId
+        }`,
         method: 'post'
         // data: params
       })
@@ -152,11 +168,11 @@ export default {
       }
     },
     async getParticipanList() {
-      // this.showLoading()
+      this.showLoading()
       let res = await this.$parent.request({
-        url: `participant/getParticipantList?gender=${this.gender}&page=${
-          this.page
-        }&pageSize=${this.pageSize}`,
+        url: `/buslove/participant/getParticipantList?gender=${
+          this.gender
+        }&page=${this.page}&pageSize=${this.pageSize}`,
         method: 'post'
         // data: params
       })
@@ -174,7 +190,7 @@ export default {
     },
     async getVote(participantId, index) {
       let res = await this.$parent.request({
-        url: 'vote/voteParticipant',
+        url: '/buslove/vote/voteParticipant',
         method: 'post',
         data: {
           userId: window.localStorage.userId,
@@ -196,16 +212,37 @@ export default {
     },
     async getAlipayUserId() {
       let res = await this.$parent.request({
-        url: `access/getAlipayUserId?auth_code=${this.$route.query.auth_code}`,
+        url: `/buslove/access/getAlipayUserId?auth_code=${
+          this.$route.query.auth_code
+        }`,
         method: 'post'
       })
       // console.log(res.data)
       if (res.code === '20000' && res.data) {
         window.localStorage.userId = res.data
       }
+    },
+    async saveActivityDataTrack() {
+      let res = await this.$parent.request({
+        url: '/data-track/activity/saveActivityDataTrack',
+        method: 'post',
+        data: {
+          activityId: 1,
+          iconId: this.iconId,
+          operationType: this.operationType,
+          pageId: this.page,
+          userId: '333'
+        }
+      })
+      // console.log(res.data)
+      if (res.code === '20000') {
+        // alert('埋点成功')
+      }
     }
   },
   mounted() {
+    this.saveActivityDataTrack()
+    this.getParticipanList()
     let that = this
     document.addEventListener('scroll', function() {
       var scrollTop =
@@ -220,14 +257,17 @@ export default {
         Math.round(scrollTop) + window.innerHeight
       ) {
         // console.log(true)
-        that.page += 1
         // console.log(that.page)
+        // that.showLoading()
+        that.page += 1
+        that.saveActivityDataTrack()
         that.getParticipanList()
+
+        // alert(that.page)
       } else {
         // console.log(false)
       }
     })
-    this.getParticipanList()
   },
   components: {
     Preheat: Preheat

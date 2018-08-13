@@ -99,7 +99,7 @@ export default {
         that.$parent
           .request({
             baseURL:
-              'https://operation.allcitygo.com/buslove/uploadFile/uploadOne',
+              'https://sit-operation.allcitygo.com/buslove/uploadFile/uploadOne',
             headers: { 'Content-type': 'multipart/form-data' },
             method: 'POST',
             data: formData,
@@ -204,7 +204,7 @@ export default {
     async uploadMes() {
       let res = await this.$parent.request({
         // url: `http://sit-operation.allcitygo.com:9109/prefer/icons`,
-        url: 'participant/apply',
+        url: '/buslove/participant/apply',
         method: 'post',
         data: {
           gender: this.gender,
