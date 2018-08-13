@@ -231,7 +231,7 @@ export default {
           iconId: this.iconId,
           operationType: this.operationType,
           pageId: this.page,
-          userId: '333'
+          userId: localStorage.userId
         }
       })
       // console.log(res.data)

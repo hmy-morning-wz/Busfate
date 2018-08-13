@@ -94,7 +94,7 @@ export default {
       var initSize = img.src.length
       var width = img.width
       var height = img.height
-      //如果图片大于四百万像素，计算压缩比并将大小压至400万以下
+      // 如果图片大于四百万像素，计算压缩比并将大小压至400万以下
       var ratio
       if ((ratio = width * height / 4000000) > 1) {
         ratio = Math.sqrt(ratio)
@@ -108,10 +108,10 @@ export default {
       //        铺底色
       this.ctx.fillStyle = '#fff'
       this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-      //如果图片像素大于100万则使用瓦片绘制
+      // 如果图片像素大于100万则使用瓦片绘制
       var count
       if ((count = width * height / 1000000) > 1) {
-        count = ~~(Math.sqrt(count) + 1) //计算要分成多少块瓦片
+        count = ~~(Math.sqrt(count) + 1) // 计算要分成多少块瓦片
         //            计算每块瓦片的宽和高
         var nw = ~~(width / count)
         var nh = ~~(height / count)
@@ -137,7 +137,7 @@ export default {
         this.ctx.drawImage(img, 0, 0, width, height)
       }
       // console.log(canvas);
-      //进行最小压缩
+      // 进行最小压缩
       var ndata = this.canvas.toDataURL('image/jpeg', 0.7)
       console.log('图片压缩成功')
       console.log('压缩前：' + initSize)
@@ -174,7 +174,7 @@ export default {
 
             async function cb() {
               // console.log(newImage)
-              var data = await that.compress(newImage) //图片压缩
+              var data = await that.compress(newImage) // 图片压缩
               console.log(data)
               that.sleep()
               let formData = new FormData()
@@ -283,59 +283,61 @@ export default {
       var newImage = new Image()
       let imageDate
 
-      //旋转图片操作
+      // 旋转图片操作
+      // eslint-disable-next-line
       EXIF.getData(image, function() {
+        // eslint-disable-next-line
         var orientation = EXIF.getTag(this, 'Orientation')
         console.log('orientation:' + orientation)
         switch (orientation) {
-          //正常状态
-          case 1:
-            console.log('旋转0°')
-            // canvas.height = height;
-            // canvas.width = width;
-            newImage = image
-            break
-          //旋转90度
-          case 6:
-            console.log('旋转90°')
-            canvas.height = width
-            canvas.width = height
-            ctx.rotate(Math.PI / 2)
-            ctx.translate(0, -height)
+        // 正常状态
+        case 1:
+          console.log('旋转0°')
+          // canvas.height = height;
+          // canvas.width = width;
+          newImage = image
+          break
+        // 旋转90度
+        case 6:
+          console.log('旋转90°')
+          canvas.height = width
+          canvas.width = height
+          ctx.rotate(Math.PI / 2)
+          ctx.translate(0, -height)
 
-            ctx.drawImage(image, 0, 0)
-            imageDate = canvas.toDataURL('Image/jpeg', 1)
-            newImage.src = imageDate
-            break
-          //旋转180°
-          case 3:
-            console.log('旋转180°')
-            canvas.height = height
-            canvas.width = width
-            ctx.rotate(Math.PI)
-            ctx.translate(-width, -height)
+          ctx.drawImage(image, 0, 0)
+          imageDate = canvas.toDataURL('Image/jpeg', 1)
+          newImage.src = imageDate
+          break
+        // 旋转180°
+        case 3:
+          console.log('旋转180°')
+          canvas.height = height
+          canvas.width = width
+          ctx.rotate(Math.PI)
+          ctx.translate(-width, -height)
 
-            ctx.drawImage(image, 0, 0)
-            imageDate = canvas.toDataURL('Image/jpeg', 1)
-            newImage.src = imageDate
-            break
-          //旋转270°
-          case 8:
-            console.log('旋转270°')
-            canvas.height = width
-            canvas.width = height
-            ctx.rotate(-Math.PI / 2)
-            ctx.translate(-height, 0)
+          ctx.drawImage(image, 0, 0)
+          imageDate = canvas.toDataURL('Image/jpeg', 1)
+          newImage.src = imageDate
+          break
+        // 旋转270°
+        case 8:
+          console.log('旋转270°')
+          canvas.height = width
+          canvas.width = height
+          ctx.rotate(-Math.PI / 2)
+          ctx.translate(-height, 0)
 
-            ctx.drawImage(image, 0, 0)
-            imageDate = canvas.toDataURL('Image/jpeg', 1)
-            newImage.src = imageDate
-            break
-          //undefined时不旋转
-          default:
-            console.log('undefined  不旋转')
-            newImage = image
-            break
+          ctx.drawImage(image, 0, 0)
+          imageDate = canvas.toDataURL('Image/jpeg', 1)
+          newImage.src = imageDate
+          break
+          // undefined时不旋转
+        default:
+          console.log('undefined  不旋转')
+          newImage = image
+          break
         }
       })
       return newImage
