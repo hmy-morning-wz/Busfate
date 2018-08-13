@@ -184,7 +184,7 @@ export default {
               that.$parent
                 .request({
                   // baseURL:`http://10.0.2.115:9234/busLove/uploadFile/fileUploadBase64`,
-                  url: '/busLove/uploadFile/fileUploadBase64',
+                  url: '/buslove/uploadFile/fileUploadBase64',
                   headers: {
                     'Content-type': 'application/x-www-form-urlencoded'
                   },
