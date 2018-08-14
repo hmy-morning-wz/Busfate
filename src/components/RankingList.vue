@@ -57,8 +57,8 @@ export default {
     }
   },
   created() {
-    // 获取用户id
-    this.getAlipayUserId()
+    // // 获取用户id
+    // this.getAlipayUserId()
     window.yl.call(
       'setTitleBarRightButton',
       {
@@ -237,6 +237,9 @@ export default {
       }
     },
     async getAlipayUserId() {
+      /* eslint-disable no-new */
+      // new Promise((resolve, reject) => setTimeout(resolve, 1000))
+      // console.log(1)
       let res = await this.$parent.request({
         url: `/buslove/access/getAlipayUserId?auth_code=${
           this.$route.query.auth_code
@@ -246,9 +249,13 @@ export default {
       // console.log(res.data)
       if (res.code === '20000' && res.data) {
         window.localStorage.userId = res.data
+        return res.data
       }
+
+      return false
     },
     async saveActivityDataTrack() {
+      // console.log(2)
       let res = await this.$parent.request({
         url: '/data-track/activity/saveActivityDataTrack',
         method: 'post',
@@ -266,8 +273,8 @@ export default {
       }
     }
   },
-  mounted() {
-    this.getAlipayUserId()
+  async mounted() {
+    await this.getAlipayUserId()
     this.saveActivityDataTrack()
     this.getParticipanList()
     let that = this
