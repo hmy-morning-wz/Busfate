@@ -215,6 +215,7 @@ export default {
       }
     },
     async getVote(participantId, index) {
+      this.showLoading()
       let res = await this.$parent.request({
         url: '/buslove/vote/voteParticipant',
         method: 'post',
@@ -224,6 +225,7 @@ export default {
         }
       })
       // console.log(res)
+      this.hideLoading()
       this.code = res.code
       if (this.code === '40004') {
         this.$messagebox.alert('', {
