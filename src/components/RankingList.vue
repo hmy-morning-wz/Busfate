@@ -121,7 +121,7 @@ export default {
       this.isActive = 'woman'
       this.text = '女'
       this.gender = 2
-      this.showLoading()
+      // this.showLoading()
       this.lists = []
       this.page = 1
       this.getParticipanList()
@@ -134,7 +134,7 @@ export default {
       this.isActive = 'man'
       this.text = '男'
       this.gender = 1
-      this.showLoading()
+      // this.showLoading()
       this.lists = []
       this.page = 1
       this.getParticipanList()
@@ -257,7 +257,7 @@ export default {
           iconId: this.iconId,
           operationType: this.operationType,
           pageId: 1,
-          userId: localStorage.userId
+          userId: window.localStorage.userId
         }
       })
       // console.log(res.data)
@@ -267,6 +267,7 @@ export default {
     }
   },
   mounted() {
+    this.getAlipayUserId()
     this.saveActivityDataTrack()
     this.getParticipanList()
     let that = this
