@@ -216,7 +216,7 @@ export default {
     },
     async getVote(participantId, index) {
       this.showLoading()
-      // alert(1)
+      alert(1)
       alert(window.localStorage.userId)
       let res = await this.$parent.request({
         url: '/buslove/vote/voteParticipant',
@@ -226,23 +226,23 @@ export default {
           participantId: participantId
         }
       })
-      // alert(2)
+      alert(2)
       // console.log(res)
       this.hideLoading()
       this.code = res.code
       if (this.code === '40004') {
         this.$messagebox.alert('', {
           title: '温馨提示',
-          message: '投票失败',
+          message: res.errMsg,
           showCancelButton: false
         })
       } else if (this.code === '20000') {
         // this.newVote = res.data
-        // alert(3)
+        alert(3)
         this.lists[index].votes = res.data
         this.$messagebox.alert('', {
           title: '温馨提示',
-          message: '投票成功',
+          message: '恭喜你，投票成功',
           showCancelButton: false
         })
       }
