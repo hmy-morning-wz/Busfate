@@ -215,7 +215,6 @@ export default {
       }
     },
     async getVote(participantId, index) {
-      this.showLoading()
       let res = await this.$parent.request({
         url: '/buslove/vote/voteParticipant',
         method: 'post',
@@ -224,8 +223,6 @@ export default {
           participantId: participantId
         }
       })
-      // console.log(res)
-      this.hideLoading()
       this.code = res.code
       if (this.code === '40004') {
         this.$messagebox.alert('', {
@@ -234,26 +231,29 @@ export default {
           showCancelButton: false
         })
       } else if (this.code === '20000') {
-        // this.newVote = res.data
         this.lists[index].votes = res.data
+        this.$messagebox.alert('', {
+          title: '温馨提示',
+          message: '投票成功',
+          showCancelButton: false
+        })
       }
     },
     async getAlipayUserId() {
       /* eslint-disable no-new */
-      // new Promise((resolve, reject) => setTimeout(resolve, 1000))
-      // console.log(1)
+      let authCode = this.$route.query.auth_code || this.url_queryString('auth_code')
+      console.log(this.$route.query.auth_code)
       let res = await this.$parent.request({
         url: `/buslove/access/getAlipayUserId?auth_code=${
-          this.$route.query.auth_code
+          authCode
         }`,
         method: 'post'
       })
-      // console.log(res.data)
+      // alert(this.$route.query.auth_code)
       if (res.code === '20000' && res.data) {
         window.localStorage.userId = res.data
         return res.data
       }
-
       return false
     },
     async saveActivityDataTrack() {
@@ -272,6 +272,14 @@ export default {
       // console.log(res.data)
       if (res.code === '20000') {
         // alert('埋点成功')
+      }
+    },
+    url_queryString(name) {
+      var rex = new RegExp('[?&]s*' + name + 's*=([^&$#]*)', 'i')
+      var r = rex.exec(location.search)
+
+      if (r && r.length === 2) {
+        return decodeURIComponent(r[1])
       }
     }
   },
