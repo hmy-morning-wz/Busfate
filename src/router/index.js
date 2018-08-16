@@ -4,7 +4,6 @@ const BusCode = r => require(['../components/BusCode'], r)
 const RankingList = r => require(['../components/RankingList'], r)
 const Signup = r => require(['../components/Signup'], r)
 const Preheat = r => require(['../components/Preheat'], r)
-const Test = r => require(['../components/test'], r)
 
 // 页面路由
 const routes = [{
@@ -41,10 +40,6 @@ const routes = [{
   meta: {
     title: '活动预热'
   }
-}, {
-  path: '/test',
-  component: Test,
-  name: 'test'
 }]
 
 // 404 页

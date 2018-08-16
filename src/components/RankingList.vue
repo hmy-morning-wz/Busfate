@@ -1,8 +1,8 @@
 <template>
   <div class="warpper">
-    <Preheat :showRankHeader="type"></Preheat>
+    <Preheat :showRankHeader="true"></Preheat>
     <div class="rank-list-warpper">
-      <!-- <div class="ranking-list" v-show="type">
+      <div class="ranking-list">
         <div class="rank-nav">
           <div class="woman-rank" @click="handleWomanClick()" :class="{ active1: isActive==='woman' }">女神榜</div>
           <div class="man-rank" @click="handleManClick()" :class="{ active1: isActive==='man' }">男神榜</div>
@@ -29,12 +29,12 @@
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
+      <div class="lists-footer" v-show="listsFooterShow">亲，已经到底了哦~</div>
       <div class="footer"></div>
-      <button class="footer footer1" :disabled="dis" @click="handleSignUpClick()">我要报名</button>
+      <button class="footer footer1" @click="handleSignUpClick()">我要报名</button>
     </div>
   </div>
-
 </template>
 
 <script type="text/ecmascript-6">
@@ -46,18 +46,19 @@ export default {
       text: '女',
       votes: 0,
       status: 0,
-      dis: false,
       gender: 2,
       page: 1,
-      pageSize: 9,
+      pageSize: 6,
       lists: [],
       code: 20000,
-      type: true
+      listsFooterShow: false,
+      iconId: 0,
+      operationType: 1
     }
   },
   created() {
-    // 获取用户id
-    this.getAlipayUserId()
+    // // 获取用户id
+    // this.getAlipayUserId()
   },
   methods: {
     // 隐藏菊花
@@ -90,31 +91,49 @@ export default {
       )
     },
     handleWomanClick() {
+      this.listsFooterShow = false
       this.isActive = 'woman'
       this.text = '女'
       this.gender = 2
+      // this.showLoading()
       this.lists = []
       this.page = 1
       this.getParticipanList()
+      this.iconId = 1
+      this.operationType = 2
+      this.saveActivityDataTrack()
     },
     handleManClick() {
+      this.listsFooterShow = false
       this.isActive = 'man'
       this.text = '男'
       this.gender = 1
+      // this.showLoading()
       this.lists = []
       this.page = 1
       this.getParticipanList()
+      this.iconId = 2
+      this.operationType = 2
+      this.saveActivityDataTrack()
     },
     handleBollot(participantId, index) {
       this.getVote(participantId, index)
+      this.iconId = 3
+      this.operationType = 2
+      this.saveActivityDataTrack()
     },
     handleSignUpClick() {
       // 获取用户报名状态
       this.getUserStatus()
+      this.iconId = 4
+      this.operationType = 2
+      this.saveActivityDataTrack()
     },
     async getUserStatus() {
       let res = await this.$parent.request({
-        url: `participant/getUserStatus?userId=${window.localStorage.userId}`,
+        url: `/buslove/participant/getUserStatus?userId=${
+          window.localStorage.userId
+        }`,
         method: 'post'
         // data: params
       })
@@ -136,40 +155,48 @@ export default {
         })
         return
       }
-      if (this.status === 0 || 3) {
+      if (this.status === 0) {
+        window.location.href = '#/Signup'
+      }
+      if (this.status === 3) {
+        this.$messagebox.alert('', {
+          title: '温馨提示',
+          message: '您的审核没通过哦，请重新报名',
+          showCancelButton: false
+        })
         window.location.href = '#/Signup'
       }
     },
     async getParticipanList() {
-      // this.showLoading()
+      this.showLoading()
       let res = await this.$parent.request({
-        url: `participant/getParticipantList?gender=${this.gender}&page=${
-          this.page
-        }&pageSize=${this.pageSize}`,
+        url: `/buslove/participant/getParticipantList?gender=${
+          this.gender
+        }&page=${this.page}&pageSize=${this.pageSize}`,
         method: 'post'
         // data: params
       })
-      // this.hideLoading()
+      this.hideLoading()
       // console.log(res.data)
-      if (res.code === '20000' && res.data) {
-        res.data.forEach(item => {
-          this.lists.push(item)
-        })
-      }
-      if (this.lists.length === 0) {
-        this.type = false
+      if (res.code === '20000') {
+        if (res.data) {
+          res.data.forEach(item => {
+            this.lists.push(item)
+          })
+        } else {
+          this.listsFooterShow = true
+        }
       }
     },
     async getVote(participantId, index) {
       let res = await this.$parent.request({
-        url: 'vote/voteParticipant',
+        url: '/buslove/vote/voteParticipant',
         method: 'post',
         data: {
           userId: window.localStorage.userId,
           participantId: participantId
         }
       })
-      // console.log(res)
       this.code = res.code
       if (this.code === '40004') {
         this.$messagebox.alert('', {
@@ -178,22 +205,62 @@ export default {
           showCancelButton: false
         })
       } else if (this.code === '20000') {
-        // this.newVote = res.data
         this.lists[index].votes = res.data
+        this.$messagebox.alert('', {
+          title: '温馨提示',
+          message: '投票成功',
+          showCancelButton: false
+        })
       }
     },
     async getAlipayUserId() {
+      /* eslint-disable no-new */
+      let authCode = this.$route.query.auth_code || this.url_queryString('auth_code')
+      console.log(this.$route.query.auth_code)
       let res = await this.$parent.request({
-        url: `access/getAlipayUserId?auth_code=${this.$route.query.auth_code}`,
+        url: `/buslove/access/getAlipayUserId?auth_code=${
+          authCode
+        }`,
         method: 'post'
       })
-      // console.log(res.data)
+      // alert(this.$route.query.auth_code)
       if (res.code === '20000' && res.data) {
         window.localStorage.userId = res.data
+        return res.data
+      }
+      return false
+    },
+    async saveActivityDataTrack() {
+      // console.log(2)
+      let res = await this.$parent.request({
+        url: '/data-track/activity/saveActivityDataTrack',
+        method: 'post',
+        data: {
+          activityId: 1,
+          iconId: this.iconId,
+          operationType: this.operationType,
+          pageId: 1,
+          userId: window.localStorage.userId
+        }
+      })
+      // console.log(res.data)
+      if (res.code === '20000') {
+        // alert('埋点成功')
+      }
+    },
+    url_queryString(name) {
+      var rex = new RegExp('[?&]s*' + name + 's*=([^&$#]*)', 'i')
+      var r = rex.exec(location.search)
+
+      if (r && r.length === 2) {
+        return decodeURIComponent(r[1])
       }
     }
   },
-  mounted() {
+  async mounted() {
+    await this.getAlipayUserId()
+    this.saveActivityDataTrack()
+    this.getParticipanList()
     let that = this
     document.addEventListener('scroll', function() {
       var scrollTop =
@@ -208,14 +275,15 @@ export default {
         Math.round(scrollTop) + window.innerHeight
       ) {
         // console.log(true)
-        that.page += 1
         // console.log(that.page)
+        // that.showLoading()
+        that.page += 1
         that.getParticipanList()
+        // alert(that.page)
       } else {
         // console.log(false)
       }
     })
-    this.getParticipanList()
   },
   components: {
     Preheat: Preheat
@@ -391,6 +459,16 @@ export default {
       }
     }
   }
+}
+.lists-footer {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  font-family: PingFangSC-Regular;
+  font-size: 11px;
+  color: #999999;
+  text-align: center;
 }
 .footer {
   width: 100%;
