@@ -23,6 +23,6 @@ export default {
     width: 100%;
     background: url("../assets/images/result.png") no-repeat;
     height: 40.026667rem;
-    background-size: contain;
+    background-size: cover;
 }
 </style>
