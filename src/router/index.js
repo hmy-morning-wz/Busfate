@@ -5,6 +5,7 @@ const RankingList = r => require(['../components/RankingList'], r)
 const Signup = r => require(['../components/Signup'], r)
 const Preheat = r => require(['../components/Preheat'], r)
 const result = r => require(['../components/result'], r)
+const PKResult = r => require(['../components/PKResult'], r)
 
 // 页面路由
 const routes = [{
@@ -45,6 +46,13 @@ const routes = [{
   path: '/result',
   component: result,
   name: 'result',
+  meta: {
+    title: '公交情缘'
+  }
+}, {
+  path: '/PKResult',
+  component: PKResult,
+  name: 'PKResult',
   meta: {
     title: '公交情缘'
   }
