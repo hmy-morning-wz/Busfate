@@ -22,9 +22,13 @@
               <div class="name">{{item.nickname}}</div>
               <div class="rode">{{item.lineNo}}路{{text}}神</div>
               <div class="ballot">{{item.votes}}票</div>
-              <div class="ballot-wrapper" @click="handleBollot(item.id,index)">
+              <div class="ballot-wrapper" v-if="!timeOut" @click="handleBollot(item.id,index)">
                 <span class="icon"></span>
                 <span class="text">投票</span>
+              </div>
+              <div class="ballot-wrapper" v-else>
+                <span class="icon"></span>
+                <span class="text">投票结束</span>
               </div>
             </div>
           </div>
@@ -32,7 +36,8 @@
       </div>
       <div class="lists-footer" v-show="listsFooterShow">亲，已经到底了哦~</div>
       <div class="footer"></div>
-      <button class="footer footer1" @click="handleSignUpClick()">我要报名</button>
+      <button class="footer footer1" v-if="!timeOut" @click="handleSignUpClick()">我要报名</button>
+      <button class="footer footer1" v-else disabled>报名结束</button>
     </div>
   </div>
 </template>
@@ -53,7 +58,8 @@ export default {
       code: 20000,
       listsFooterShow: false,
       iconId: 0,
-      operationType: 1
+      operationType: 1,
+      timeOut: false
     }
   },
   created() {
@@ -215,17 +221,19 @@ export default {
     },
     async getAlipayUserId() {
       /* eslint-disable no-new */
-      let authCode = this.$route.query.auth_code || this.url_queryString('auth_code')
+      let authCode =
+        this.$route.query.auth_code || this.url_queryString('auth_code')
       console.log(this.$route.query.auth_code)
       let res = await this.$parent.request({
-        url: `/buslove/access/getAlipayUserId?auth_code=${
-          authCode
-        }`,
+        url: `/buslove/access/getAlipayUserId?auth_code=${authCode}`,
         method: 'post'
       })
       // alert(this.$route.query.auth_code)
       if (res.code === '20000' && res.data) {
-        window.localStorage.userId = res.data
+        window.localStorage.userId = res.data.alipayUserId
+        if (res.data.activityStatus === 0) {
+          this.timeOut = true
+        }
         return res.data
       }
       return false

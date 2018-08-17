@@ -4,7 +4,7 @@ const BusCode = r => require(['../components/BusCode'], r)
 const RankingList = r => require(['../components/RankingList'], r)
 const Signup = r => require(['../components/Signup'], r)
 const Preheat = r => require(['../components/Preheat'], r)
-const Result = r => require(['../components/Result'], r)
+const result = r => require(['../components/Result'], r)
 
 // 页面路由
 const routes = [{
@@ -42,11 +42,11 @@ const routes = [{
     title: '活动预热'
   }
 }, {
-  path: '/Result',
-  component: Result,
-  name: 'Result',
+  path: '/result',
+  component: result,
+  name: 'result',
   meta: {
-    title: '结果公布'
+    title: '公交情缘'
   }
 }]
 
